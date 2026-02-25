@@ -1,0 +1,181 @@
+#include "Computation.h"
+
+
+
+using namespace mv;
+using namespace mv::gui;
+
+void Computation::triggerPCA(mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset)
+{
+    qDebug() << "PCA triggered";
+
+    if (!_pcaAnalysisPlugin) {
+        _pcaAnalysisPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("PCA Analysis", { inputDataset }, { outputDataset });
+    }
+
+    if (!_pcaAnalysisPlugin) {
+        qCritical() << "PCA Analysis Plugin not found in ManiVault!";
+        return;
+    }
+
+    auto componentsAction = dynamic_cast<IntegralAction*>(outputDataset->findChildByPath("PCA/Number of PCA components"));
+    if (!componentsAction) {
+        qCritical() << "Number of PCA components action not found";
+    }
+    componentsAction->setMaximum(inputDataset->getNumDimensions());
+    componentsAction->setValue(inputDataset->getNumDimensions());
+
+
+    auto startAction = dynamic_cast<TriggerAction*>(outputDataset->findChildByPath("PCA/Start analysis"));
+
+    if (startAction) {
+        startAction->trigger();
+        qDebug() << "PCA analysis started";
+       /* QEventLoop loop;
+        loop.processEvents();
+        outputDataset->setSelectionIndices({});
+        mv::events().notifyDatasetDataSelectionChanged(outputDataset);*/
+
+    }
+    else {
+        qCritical() << "Start analysis action not found in PCA dataset";
+
+    }
+}
+
+void Computation::triggerProjectAverages(
+    mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset,
+    mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
+    mv::Dataset<Clusters> positionClusterDataset)
+{
+    qDebug() << "Projecting PC start";
+
+    if (!_projectAveragesPlugin) {
+        _projectAveragesPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("Project Averages", { inputDataset }, { outputDataset });
+    }
+
+    if (!_projectAveragesPlugin) {
+        qCritical() << "Project Average Plugin not found in ManiVault!";
+        return;
+    }
+    
+    auto averagePointDatasetPickerAction = dynamic_cast<DatasetPickerAction*>(outputDataset->findChildByPath("Settings/Averages Point Dataset"));
+    if (!averagePointDatasetPickerAction) {
+        qCritical() << "Averages Point Dataset picker action not found in projection output dataset";
+        return;
+    }
+    averagePointDatasetPickerAction->setCurrentDataset(averagePointDataset);
+
+    auto averageClusterDatasetPickerAction = dynamic_cast<DatasetPickerAction*>(outputDataset->findChildByPath("Settings/Averages Cluster Dataset"));
+    if (!averageClusterDatasetPickerAction) {
+        qCritical() << "Averages Cluster Dataset picker action not found in projection output dataset";
+        return;
+    }
+    averageClusterDatasetPickerAction->setCurrentDataset(averageClusterDataset);
+
+    auto positionClusterDatasetPickerAction = dynamic_cast<DatasetPickerAction*>(outputDataset->findChildByPath("Settings/Position Cluster Dataset"));
+    if (!positionClusterDatasetPickerAction) {
+        qCritical() << "Position Cluster Dataset picker action not found in projection output dataset";
+        return;
+    }
+    positionClusterDatasetPickerAction->setCurrentDataset(positionClusterDataset);
+
+    auto startAction = dynamic_cast<TriggerAction*>(outputDataset->findChildByPath("Settings/Update Trigger Action"));
+    if (startAction) {
+        startAction->trigger();
+        qDebug() << "Project averages analysis started";
+       /* QEventLoop loop;
+        loop.processEvents();
+        outputDataset->setSelectionIndices({});
+        mv::events().notifyDatasetDataSelectionChanged(outputDataset);*/
+    }
+    else {
+        qCritical() << "Start analysis action not found in projection output dataset";
+    }
+    
+}
+
+void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID, const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID)
+{
+    auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
+
+    if (scatterplotViewFactory)
+    {
+        bool pluginfound = false;
+        for (auto plugin : mv::plugins().getPluginsByFactory(scatterplotViewFactory))
+        {
+            if (plugin->getGuiName() == scatterplotNameForPC)
+            {
+                pluginfound = true;
+
+                // set the position dataset
+                mv::gui::DatasetPickerAction* pointDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Position");
+                if (pointDatasetPickerValueAction)
+                {
+                    //if (!pointDatasetPickerValueAction->getCurrentDataset().isValid())
+                    {
+                        auto embeddingDataset = mv::data().getDataset(positionDatasetID);
+                        if (embeddingDataset.isValid())
+                        {
+                            pointDatasetPickerValueAction->setCurrentDataset(embeddingDataset);
+                        }
+                    }
+                }
+                else
+                {
+                    qWarning() << "Position dataset picker action not found in scatterplot plugin";
+                }
+
+                // set coloring
+                mv::gui::DatasetPickerAction* coloringDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Color");
+                if (coloringDatasetPickerValueAction)
+                {
+                    {
+                        auto coloringDataset = mv::data().getDataset(colorDatasetID);
+                        if (coloringDataset.isValid())
+                        {
+                            coloringDatasetPickerValueAction->setCurrentDataset(coloringDataset);
+                        }
+                    }
+                }
+                else
+                {
+                    qWarning() << "Coloring dataset picker action not found in scatterplot plugin";
+                }
+
+                // set color map same as in the figure
+                mv::gui::OptionAction* coloringColorMapOptionsAction = findActionByPath<OptionAction>(plugin, "Settings/Coloring/1D Color map/Current color map");
+                if (coloringColorMapOptionsAction)
+                {
+                    coloringColorMapOptionsAction->setCurrentText("Viridis");
+                }
+                else
+                {
+                    qWarning() << "Coloring color map option action not found in scatterplot plugin";
+                }
+
+
+                // set opacity to 0 for non-target cell types
+                
+                mv::gui::DatasetPickerAction* opacityDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Point opacity");
+                //if (opacityPickerValueAction && opacityDatasetPickerValueAction)
+                if (opacityDatasetPickerValueAction)
+                {
+                    auto opacityDataset = mv::data().getDataset(opacityDatasetID);
+                    opacityDatasetPickerValueAction->setCurrentDataset(opacityDataset);
+                }
+                else {
+                    qWarning() << "opacityDatasetPickerValueAction not found";
+                }
+
+                break;
+            }
+
+        }
+        if (!pluginfound)
+        {
+            qCritical() << "Scatterplot plugin not found with name:" << scatterplotNameForPC;
+        }
+    }
+}
+
