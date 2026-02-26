@@ -188,6 +188,47 @@ void ATACViewPlugin::plotPCProjection()
         qDebug() << "No valid cell type cluster dataset selected for setting opacity scalars.";
     }
 
+    //FIXME: this is hardcoded for now
+    // TODO: add qc filter here - if qc checked, set opacity to 0 for points that do not pass qc
+    if (_settingsAction.getQcPassAction().isChecked())
+    {
+        // get qc pass dataset and set opacity to 0 for points that do not pass qc
+        if (!_qcPassDataset.isValid())
+        {
+            for (const auto& data : mv::data().getAllDatasets())
+            {
+                if (data->getGuiName() == "qc_pass")
+                {
+                    _qcPassDataset = data;
+                    qDebug() << "Found qcPass dataset";
+                    break;
+                }
+            }
+        }
+
+        if (_qcPassDataset.isValid())
+        {
+            const auto& clusters = _qcPassDataset->getClusters();
+            for (const auto& cluster : clusters)
+            {
+                qDebug() << "QC Pass cluster name: " << cluster.getName();
+                if (cluster.getName() == "id_0")
+                {
+                    const auto& indices = cluster.getIndices();
+                    for (const auto& index : indices)
+                    {
+                        opacityScalars[index] = 0.0f; // set opacity to 0 for points do not pass qc
+                    }
+                }
+            }
+        }
+        else
+        {
+            qDebug() << "QC Pass dataset not found, cannot apply QC filter to opacity scalars.";
+        }
+        
+    }
+
     _opacityDataset->setData(opacityScalars.data(), spatialDataset->getNumPoints(), 1);
     mv::events().notifyDatasetDataChanged(_opacityDataset);
 
@@ -234,6 +275,7 @@ void ATACViewPlugin::addOtherActions()
     groupActionPC->addAction(&_settingsAction.getFeatureDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeSelectionAction());
+    groupActionPC->addAction(&_settingsAction.getQcPassAction());
     groupActionPC->addAction(&_settingsAction.getStartAnalysisAction());
 
     groupActionPC->setExpanded(true);

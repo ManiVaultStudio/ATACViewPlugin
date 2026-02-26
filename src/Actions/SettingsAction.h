@@ -5,6 +5,7 @@
 #include <actions/DatasetPickerAction.h>
 #include <actions/OptionsAction.h>
 #include <actions/OptionAction.h>
+#include <actions/ToggleAction.h>
 
 #include <PointData/DimensionPickerAction.h>
 
@@ -69,6 +70,8 @@ public: // Action getters
     TriggerAction& getStartAnalysisAction() { return _startAnalysisAction; }
     DimensionSelectionAction& getDimensionSelectionAction() { return _dimensionSelectionAction; }
 
+    ToggleAction& getQcPassAction() { return _qcPassAction; }
+
 
 protected:
     void setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin);
@@ -94,11 +97,11 @@ private:
     DatasetPickerAction                 _featureDatasetAction; // e.g. avgExprDataset (for ATAC) or marm_Cluster_v4_metacell (for RNA)
     DatasetPickerAction                 _cellTypeDatasetAction; // e.g. Cluster_NT
     // select a cell type from the above cell type dataset
-    OptionsAction                       _cellTypeSelectionAction; //e.g. Glut or GABA
-    
+    OptionsAction                       _cellTypeSelectionAction; //e.g. Glut or GABA   
     TriggerAction                       _startAnalysisAction;
-
     DimensionSelectionAction            _dimensionSelectionAction;
 
+
+    ToggleAction                        _qcPassAction;
 
 };

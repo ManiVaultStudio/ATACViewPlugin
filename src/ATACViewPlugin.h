@@ -89,6 +89,8 @@ protected:
 
     mv::Dataset<Points>     _opacityDataset; // point opacity scalars fro selected cell types
 
+    mv::Dataset<Clusters>   _qcPassDataset; // cluster dataset for QC pass/fail information
+
     SettingsAction              _settingsAction;         
 
     GroupsAction*           groupForAction = nullptr;
