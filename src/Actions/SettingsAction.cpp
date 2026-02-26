@@ -20,10 +20,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _cellTypeDatasetAction(this, "Cell type dataset"),
     _cellTypeSelectionAction(this, "Cell type selection"),
     _dimensionSelectionAction(this),
-    _startAnalysisAction(this, "Start analysis"),
-
-    _rnaDimensionPickerAction(this, "RNA dimension selection"),
-    _atacDimensionPickerAction(this, "ATAC dimension selection")
+    _startAnalysisAction(this, "Start analysis")
 {
     setText("Settings");
     setSerializationName("SettingsAction");
@@ -53,10 +50,6 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_cellTypeSelectionAction);
     addAction(&_dimensionSelectionAction);
     addAction(&_startAnalysisAction);
-
-    addAction(&_rnaDimensionPickerAction);
-
-    addAction(&_atacDimensionPickerAction);
 
     //_spatialClusterDatasetAction.setToolTip()
 

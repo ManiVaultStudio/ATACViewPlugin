@@ -58,6 +58,11 @@ public:
 
     void plotPCProjection();
 
+private:
+
+    void addProjectAveragesSettingsGroupActions();
+
+    void addOtherActions();
 
 public: // Serialization
     /**
@@ -85,6 +90,8 @@ protected:
     mv::Dataset<Points>     _opacityDataset; // point opacity scalars fro selected cell types
 
     SettingsAction              _settingsAction;         
+
+    GroupsAction*           groupForAction = nullptr;
     
 };
 

@@ -157,7 +157,7 @@ void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QSt
 
                 // set opacity to 0 for non-target cell types
                 
-                mv::gui::DatasetPickerAction* opacityDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Point opacity");
+                mv::gui::DatasetPickerAction* opacityDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Plot/Point/Point opacity/Source dataset");
                 //if (opacityPickerValueAction && opacityDatasetPickerValueAction)
                 if (opacityDatasetPickerValueAction)
                 {

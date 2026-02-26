@@ -15,7 +15,11 @@ ATACViewPlugin::ATACViewPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
     _settingsAction(this, "Settings")
 {
-
+    //connect(&mv::projects(), &AbstractProjectManager::projectOpened, this, &ATACViewPlugin::addProjectAveragesSettingsGroupActions);
+    connect(&mv::projects(), &AbstractProjectManager::projectOpened, this, [this]() {
+        addProjectAveragesSettingsGroupActions();
+        addOtherActions();
+        });
 
 }
 
@@ -26,68 +30,9 @@ void ATACViewPlugin::init()
 
     layout->setContentsMargins(0, 0, 0, 0);
 
-    GroupAction* groupActionRNA = new GroupAction(this, "RNA settings");
-
-    groupActionRNA->addAction(&_settingsAction.getRNADimensionPickerAction());
-
-    groupActionRNA->setExpanded(true);
-
-
-    GroupAction* groupActionATAC = new GroupAction(this, "ATAC settings");
-
-    groupActionATAC->addAction(&_settingsAction.getATACDimensionPickerAction());
-
-    groupActionATAC->setExpanded(true);
-
-
-    GroupAction* groupActionPC = new GroupAction(this, "PC coloring settings");
-
-    groupActionPC->addAction(&_settingsAction.getFeatureDatasetAction());
-    groupActionPC->addAction(&_settingsAction.getCellTypeDatasetAction());
-    groupActionPC->addAction(&_settingsAction.getCellTypeSelectionAction());
-    groupActionPC->addAction(&_settingsAction.getStartAnalysisAction());
-
-    groupActionPC->setExpanded(true);
-
-    GroupAction* groupActionPCAInputDimensions = new GroupAction(this, "PCA input dimensions");
-    groupActionPCAInputDimensions->addAction(&_settingsAction.getDimensionSelectionAction());
-
-    groupActionPC->setExpanded(true);
-
-    GroupAction* groupActionAdvanced = new GroupAction(this, "Advanced settings"); // settings that are not likely to be used by the user
-
-    groupActionAdvanced->addAction(&_settingsAction.getSpatialDatasetAction());
-    groupActionAdvanced->addAction(&_settingsAction.getSpatialClusterDatasetAction());
-    groupActionAdvanced->addAction(&_settingsAction.getAveragesClusterDatasetAction());
-    groupActionAdvanced->addAction(&_settingsAction.getScatterplotForPCAction());
-
-    groupActionAdvanced->setExpanded(false);
-
-    GroupsAction* groupForAction = new GroupsAction(this, "Settings");
-    groupForAction->addGroupAction(groupActionRNA);
-    groupForAction->addGroupAction(groupActionATAC);
-    groupForAction->addGroupAction(groupActionPC);
-    groupForAction->addGroupAction(groupActionPCAInputDimensions);
-    groupForAction->addGroupAction(groupActionAdvanced);
+    groupForAction = new GroupsAction(this, "Settings");
 
     layout->addWidget(groupForAction->createWidget(&getWidget()));
-
-
-    //layout->addWidget(_settingsAction.getFeatureDatasetAction().createWidget(&getWidget()));
-
-    //layout->addWidget(_settingsAction.getSpatialDatasetAction().createWidget(&getWidget()));
-    //layout->addWidget(_settingsAction.getCellTypeDatasetAction().createWidget(&getWidget()));
-    //layout->addWidget(_settingsAction.getCellTypeSelectionAction().createWidget(&getWidget()));
-
-    //layout->addWidget(_settingsAction.getScatterplotForPCAction().createWidget(&getWidget()));
-
-    //layout->addWidget(_settingsAction.getAveragesClusterDatasetAction().createWidget(&getWidget()));
-    //layout->addWidget(_settingsAction.getSpatialClusterDatasetAction().createWidget(&getWidget()));
-    
-
-    //layout->addWidget(_settingsAction.getDimensionSelectionAction().createWidget(&getWidget()));
-    //layout->addWidget(_settingsAction.getStartAnalysisAction().createWidget(&getWidget()));
-
 
     // Apply the layout
     getWidget().setLayout(layout);
@@ -110,6 +55,11 @@ void ATACViewPlugin::init()
         _settingsAction.setupscatterplotForPCAction();
         });
 
+    if (!mv::projects().isOpeningProject())
+    { 
+        addProjectAveragesSettingsGroupActions();
+        addOtherActions();
+    }
 }
 
 void ATACViewPlugin::computePCA()
@@ -248,7 +198,64 @@ void ATACViewPlugin::plotPCProjection()
 
      qDebug() << "plotPCProjection finished";
 
+}
 
+void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
+{
+    const auto paPluginKind = "Project Averages";
+
+    const auto paPluginFactory = mv::plugins().getPluginFactory(paPluginKind);
+
+    // FIXME: temp hard code to only first two plugins
+    int pluginCount = 0;
+
+    for (const auto& paPlugin : mv::plugins().getPluginsByFactory(paPluginFactory))
+    {
+        pluginCount++;
+        if (pluginCount > 2)
+            break;
+
+        auto analysisPlugin = dynamic_cast<AnalysisPlugin*>(paPlugin);
+        auto groupAction = new GroupAction(this, paPlugin->getGuiName());
+
+        groupAction->addAction(analysisPlugin->getOutputDataset()->findChildByPath<DimensionPickerAction>("Settings/Averages Dataset Dimension"));
+
+        groupAction->setExpanded(true);
+
+        groupForAction->addGroupAction(groupAction);
+    }
+}
+
+void ATACViewPlugin::addOtherActions()
+{
+
+    GroupAction* groupActionPC = new GroupAction(this, "PC coloring settings");
+
+    groupActionPC->addAction(&_settingsAction.getFeatureDatasetAction());
+    groupActionPC->addAction(&_settingsAction.getCellTypeDatasetAction());
+    groupActionPC->addAction(&_settingsAction.getCellTypeSelectionAction());
+    groupActionPC->addAction(&_settingsAction.getStartAnalysisAction());
+
+    groupActionPC->setExpanded(true);
+
+    GroupAction* groupActionPCAInputDimensions = new GroupAction(this, "PCA input dimensions");
+    groupActionPCAInputDimensions->addAction(&_settingsAction.getDimensionSelectionAction());
+
+    groupActionPC->setExpanded(true);
+
+    GroupAction* groupActionAdvanced = new GroupAction(this, "Advanced settings"); // settings that are not likely to be used by the user
+
+    groupActionAdvanced->addAction(&_settingsAction.getSpatialDatasetAction());
+    groupActionAdvanced->addAction(&_settingsAction.getSpatialClusterDatasetAction());
+    groupActionAdvanced->addAction(&_settingsAction.getAveragesClusterDatasetAction());
+    groupActionAdvanced->addAction(&_settingsAction.getScatterplotForPCAction());
+
+    groupActionAdvanced->setExpanded(false);
+
+
+    groupForAction->addGroupAction(groupActionPC);
+    groupForAction->addGroupAction(groupActionPCAInputDimensions);
+    groupForAction->addGroupAction(groupActionAdvanced);
 }
 // =============================================================================
 // Serialization

@@ -69,11 +69,6 @@ public: // Action getters
     TriggerAction& getStartAnalysisAction() { return _startAnalysisAction; }
     DimensionSelectionAction& getDimensionSelectionAction() { return _dimensionSelectionAction; }
 
-    // - RNA gene related settings -
-    DimensionPickerAction& getRNADimensionPickerAction() { return _rnaDimensionPickerAction; }
-
-    // - ATAC peak related settings -
-    DimensionPickerAction& getATACDimensionPickerAction() { return _atacDimensionPickerAction; }
 
 protected:
     void setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin);
@@ -105,10 +100,5 @@ private:
 
     DimensionSelectionAction            _dimensionSelectionAction;
 
-    // - RNA gene related settings -
-    DimensionPickerAction               _rnaDimensionPickerAction; 
 
-
-    // - ATAC peak related settings -
-    DimensionPickerAction               _atacDimensionPickerAction;
 };
