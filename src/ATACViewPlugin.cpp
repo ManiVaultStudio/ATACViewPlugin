@@ -15,7 +15,6 @@ ATACViewPlugin::ATACViewPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
     _settingsAction(this, "Settings")
 {
-    //connect(&mv::projects(), &AbstractProjectManager::projectOpened, this, &ATACViewPlugin::addProjectAveragesSettingsGroupActions);
     connect(&mv::projects(), &AbstractProjectManager::projectOpened, this, [this]() {
         addProjectAveragesSettingsGroupActions();
         addOtherActions();
@@ -38,14 +37,14 @@ void ATACViewPlugin::init()
     getWidget().setLayout(layout);
 
     connect(&_pcaOutputDataset, &Dataset<Points>::dataChanged, this, [this]() {
-        qDebug() << "PCA output dataset data changed";
+        //qDebug() << "PCA output dataset data changed";
         
         // assume that PCA finished
         projectPC();
         });
 
     connect(&_projectionOutputDataset, &Dataset<Points>::dataChanged, this, [this]() {
-        qDebug() << "Projection output dataset data changed";
+        //qDebug() << "Projection output dataset data changed";
         
         // assume that projection finished
         plotPCProjection();
@@ -106,8 +105,6 @@ void ATACViewPlugin::computePCA()
 
 void ATACViewPlugin::projectPC()
 {
-    qDebug() << "Projecting PC ";
-    
     std::vector<float> projectedData;
     _pcaOutputDataset->extractDataForDimension(projectedData, 0); // PC1
 
@@ -129,13 +126,10 @@ void ATACViewPlugin::projectPC()
 
     _computation.triggerProjectAverages(spatialDataset, _projectionOutputDataset, _pcaOutputDataset, averageClusterDataset, positionClusterDataset);
     
-
 }
 
 void ATACViewPlugin::plotPCProjection()
-{
-    qDebug() << "Plotting PC projection";
-    
+{    
     QString scatterplotNameForPC = _settingsAction.getScatterplotForPCAction().getCurrentText();
 
     if (scatterplotNameForPC.isEmpty())
@@ -155,9 +149,6 @@ void ATACViewPlugin::plotPCProjection()
     if (!_opacityDataset.isValid())
     {
         _opacityDataset = mv::data().createDerivedDataset("Opacity scalars celltype", spatialDataset);
-
-        /*std::vector<float> initialOpacityScalars(spatialDataset->getNumPoints(), 1.0f);
-        _opacityDataset->setData(initialOpacityScalars.data(), spatialDataset->getNumPoints(), 1);*/
 
         //_opacityDataset->setGroupIndex(667);
         mv::events().notifyDatasetAdded(_opacityDataset);
@@ -189,7 +180,7 @@ void ATACViewPlugin::plotPCProjection()
     }
 
     //FIXME: this is hardcoded for now
-    // TODO: add qc filter here - if qc checked, set opacity to 0 for points that do not pass qc
+    // if qc checked, set opacity to 0 for points that do not pass qc
     if (_settingsAction.getQcPassAction().isChecked())
     {
         // get qc pass dataset and set opacity to 0 for points that do not pass qc
@@ -212,7 +203,7 @@ void ATACViewPlugin::plotPCProjection()
             for (const auto& cluster : clusters)
             {
                 qDebug() << "QC Pass cluster name: " << cluster.getName();
-                if (cluster.getName() == "id_0")
+                if (cluster.getName() == "id_0") //FIXME: hardcoded for now, need to make it more flexible in the future
                 {
                     const auto& indices = cluster.getIndices();
                     for (const auto& index : indices)
@@ -236,9 +227,6 @@ void ATACViewPlugin::plotPCProjection()
 
     _computation.plotScatterplot(scatterplotNameForPC, positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID);
 
-
-     qDebug() << "plotPCProjection finished";
-
 }
 
 void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
@@ -257,7 +245,7 @@ void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
             break;
 
         auto analysisPlugin = dynamic_cast<AnalysisPlugin*>(paPlugin);
-        //auto groupAction = new GroupAction(this, paPlugin->getGuiName());
+
         auto groupAction = new GroupAction(this, analysisPlugin->getOutputDataset()->getGuiName());
 
         groupAction->addAction(analysisPlugin->getOutputDataset()->findChildByPath<DimensionPickerAction>("Settings/Averages Dataset Dimension"));

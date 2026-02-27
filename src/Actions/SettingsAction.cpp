@@ -56,33 +56,33 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 
     //_spatialClusterDatasetAction.setToolTip()
 
-    connect(&_spatialDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
-        qDebug() << "Selected spatial dataset changed in settings action";
-        //auto selectedDataset = _spatialDatasetAction.getCurrentDataset<Points>();
-        });
+    //connect(&_spatialDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
+    //    qDebug() << "Selected spatial dataset changed in settings action";
+    //    //auto selectedDataset = _spatialDatasetAction.getCurrentDataset<Points>();
+    //    });
 
     connect(&_featureDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
-        qDebug() << "Selected dataset changed in settings action";
+        //qDebug() << "Selected dataset changed in settings action";
         auto selectedDataset = _featureDatasetAction.getCurrentDataset<Points>();
         _dimensionSelectionAction.getPickerAction().setPointsDataset(selectedDataset);
         });
 
     connect(&_cellTypeDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
 
-        qDebug() << "Selected cell type dataset changed in settings action";
+        //qDebug() << "Selected cell type dataset changed in settings action";
 
         setupCellTypeSelectionAction();
         });
 
-    connect(&_cellTypeSelectionAction, &OptionsAction::selectedOptionsChanged, this, [this]() {
-        qDebug() << "Selected cell type(s) changed in settings action";
+    //connect(&_cellTypeSelectionAction, &OptionsAction::selectedOptionsChanged, this, [this]() {
+    //    qDebug() << "Selected cell type(s) changed in settings action";
 
-        // TODO: change the view or only change the view when start analysis is triggered?
-        });
+    //    // TODO: change the view or only change the view when start analysis is triggered?
+    //    });
 
 
     connect(&_startAnalysisAction, &TriggerAction::triggered, this, [this]() {
-        qDebug() << "Start analysis triggered in settings action";
+        //qDebug() << "Start analysis triggered in settings action";
         _atacViewPlugin->computePCA();
         });
 
@@ -111,18 +111,6 @@ void SettingsAction::setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin)
     _cellTypeDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
         return dataset->getDataType() == ClusterType;
         });
-
-    //_cellTypeDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
-    //    if (!(dataset->getDataType() == PointType || dataset->getDataType() == ColorType || dataset->getDataType() == ClusterType))
-    //        return false;
-
-    //    /*const auto positionDataset = atacViewPlugin->getPositionDataset();
-
-    //    if (!positionDataset.isValid())
-    //        return false;*/
-
-    //    return true;
-    //    });
 }
 
 void SettingsAction::setupCellTypeSelectionAction()
@@ -151,9 +139,6 @@ void SettingsAction::setupscatterplotForPCAction()
     }
 
     _scatterplotForPCAction.setOptions(scatterplotNames);
-
-    /*if (!scatterplotNames.isEmpty())
-        _scatterplotForPCAction.setCurrentIndex();*/
 
 }
 

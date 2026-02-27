@@ -7,8 +7,6 @@ using namespace mv::gui;
 
 void Computation::triggerPCA(mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset)
 {
-    qDebug() << "PCA triggered";
-
     if (!_pcaAnalysisPlugin) {
         _pcaAnalysisPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("PCA Analysis", { inputDataset }, { outputDataset });
     }
@@ -48,8 +46,6 @@ void Computation::triggerProjectAverages(
     mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
     mv::Dataset<Clusters> positionClusterDataset)
 {
-    qDebug() << "Projecting PC start";
-
     if (!_projectAveragesPlugin) {
         _projectAveragesPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("Project Averages", { inputDataset }, { outputDataset });
     }
