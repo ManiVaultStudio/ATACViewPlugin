@@ -257,7 +257,8 @@ void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
             break;
 
         auto analysisPlugin = dynamic_cast<AnalysisPlugin*>(paPlugin);
-        auto groupAction = new GroupAction(this, paPlugin->getGuiName());
+        //auto groupAction = new GroupAction(this, paPlugin->getGuiName());
+        auto groupAction = new GroupAction(this, analysisPlugin->getOutputDataset()->getGuiName());
 
         groupAction->addAction(analysisPlugin->getOutputDataset()->findChildByPath<DimensionPickerAction>("Settings/Averages Dataset Dimension"));
 
