@@ -39,11 +39,6 @@ public:
         const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID);
 
 
-
-private:
-
-    void computeOpacityDataset();// TODO
-
 private:
 
     mv::plugin::AnalysisPlugin* _pcaAnalysisPlugin = nullptr;
