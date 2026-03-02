@@ -7,14 +7,24 @@ using namespace mv::gui;
 
 void Computation::triggerPCA(mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset)
 {
-    if (!_pcaAnalysisPlugin) {
+    /*if (!_pcaAnalysisPlugin) {
+        qDebug() << "Requesting PCA Analysis plugin from ManiVault...";
+        _pcaAnalysisPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("PCA Analysis", { inputDataset }, { outputDataset });
+    }*/
+
+    //if (!_pcaAnalysisPlugin) {
+    //    qCritical() << "PCA Analysis Plugin not found in ManiVault!";
+    //    return;
+    //}
+
+    // check if a PCA plugin is attached to the output dataset, otherwise request a new one
+    auto checkAction = dynamic_cast<IntegralAction*>(outputDataset->findChildByPath("PCA/Number of PCA components"));
+    if (!checkAction) {
+        qDebug() << "Number of PCA components action not found, request a PCA plugin";
         _pcaAnalysisPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("PCA Analysis", { inputDataset }, { outputDataset });
     }
 
-    if (!_pcaAnalysisPlugin) {
-        qCritical() << "PCA Analysis Plugin not found in ManiVault!";
-        return;
-    }
+    // get the related actions
 
     auto componentsAction = dynamic_cast<IntegralAction*>(outputDataset->findChildByPath("PCA/Number of PCA components"));
     if (!componentsAction) {
