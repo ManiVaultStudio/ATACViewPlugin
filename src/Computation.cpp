@@ -208,6 +208,8 @@ void Computation::plotScatterplot(const QString& positionDatasetID, const QStrin
             {
                 pluginfound = true;
 
+                _pcScatterplotViewPlugin = dynamic_cast<ViewPlugin*>(plugin);
+
                 setupPCAScatterplot(positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
 
                 break;
@@ -237,6 +239,11 @@ void Computation::setupPCAScatterplot(const QString& positionDatasetID,
     const QString& colorDatasetID, const QString& celltypeClusterDatasetID,
     const QString& opacityDatasetID, const QString& colorMap)
 {
+    if (!_pcScatterplotViewPlugin) {
+        qCritical() << "Scatterplot PC is not set up";
+        return;
+    }
+
     // set the position dataset
     mv::gui::DatasetPickerAction* pointDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(_pcScatterplotViewPlugin, "Settings/Datasets/Position");
     if (pointDatasetPickerValueAction)
