@@ -35,9 +35,20 @@ public:
         mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
         mv::Dataset<Clusters> positionClusterDataset);
 
-    void plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID,
+
+    /*void plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID,
         const QString& colorDatasetID, const QString& celltypeClusterDatasetID,
-        const QString& opacityDatasetID, const QString& colorMap);
+        const QString& opacityDatasetID, const QString& colorMap);*/
+
+
+    void plotScatterplot(const QString& positionDatasetID,
+        const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap);
+
+private:
+
+    void setupPCAScatterplot(const QString& positionDatasetID,
+        const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap);
+
 
 
 private:
@@ -45,4 +56,6 @@ private:
     mv::plugin::AnalysisPlugin* _pcaAnalysisPlugin = nullptr;
 
     mv::plugin::AnalysisPlugin* _projectAveragesPlugin = nullptr;
+
+    mv::plugin::ViewPlugin*     _pcScatterplotViewPlugin = nullptr;
 };

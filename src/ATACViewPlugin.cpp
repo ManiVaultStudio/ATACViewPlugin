@@ -227,7 +227,11 @@ void ATACViewPlugin::plotPCProjection()
 
     const QString colorMap = _settingsAction.getColorMapSelectionAction().getColorMap();
 
-    _computation.plotScatterplot(scatterplotNameForPC, positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
+    //_computation.plotScatterplot(scatterplotNameForPC, positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
+
+
+    _computation.plotScatterplot(positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
+
 
 }
 

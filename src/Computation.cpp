@@ -107,8 +107,96 @@ void Computation::triggerProjectAverages(
     
 }
 
-void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID, const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap)
+
+//void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID, const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap)
+//{
+//    auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
+//
+//    if (scatterplotViewFactory)
+//    {
+//        bool pluginfound = false;
+//        for (auto plugin : mv::plugins().getPluginsByFactory(scatterplotViewFactory))
+//        {
+//            if (plugin->getGuiName() == scatterplotNameForPC)
+//            {
+//                pluginfound = true;
+//
+//                // set the position dataset
+//                mv::gui::DatasetPickerAction* pointDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Position");
+//                if (pointDatasetPickerValueAction)
+//                {
+//                    //if (!pointDatasetPickerValueAction->getCurrentDataset().isValid())
+//                    {
+//                        auto embeddingDataset = mv::data().getDataset(positionDatasetID);
+//                        if (embeddingDataset.isValid())
+//                        {
+//                            pointDatasetPickerValueAction->setCurrentDataset(embeddingDataset);
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    qWarning() << "Position dataset picker action not found in scatterplot plugin";
+//                }
+//
+//                // set coloring
+//                mv::gui::DatasetPickerAction* coloringDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Color");
+//                if (coloringDatasetPickerValueAction)
+//                {
+//                    {
+//                        auto coloringDataset = mv::data().getDataset(colorDatasetID);
+//                        if (coloringDataset.isValid())
+//                        {
+//                            coloringDatasetPickerValueAction->setCurrentDataset(coloringDataset);
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    qWarning() << "Coloring dataset picker action not found in scatterplot plugin";
+//                }
+//
+//                // set color map same as in the figure
+//                mv::gui::OptionAction* coloringColorMapOptionsAction = findActionByPath<OptionAction>(plugin, "Settings/Coloring/1D Color map/Current color map");
+//                if (coloringColorMapOptionsAction)
+//                {
+//                    //coloringColorMapOptionsAction->setCurrentText("Viridis");
+//                    coloringColorMapOptionsAction->setCurrentText("colorMap");
+//                }
+//                else
+//                {
+//                    qWarning() << "Coloring color map option action not found in scatterplot plugin";
+//                }
+//
+//
+//                // set opacity to 0 for non-target cell types
+//                
+//                mv::gui::DatasetPickerAction* opacityDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Plot/Point/Point opacity/Source dataset");
+//                //if (opacityPickerValueAction && opacityDatasetPickerValueAction)
+//                if (opacityDatasetPickerValueAction)
+//                {
+//                    auto opacityDataset = mv::data().getDataset(opacityDatasetID);
+//                    opacityDatasetPickerValueAction->setCurrentDataset(opacityDataset);
+//                }
+//                else {
+//                    qWarning() << "opacityDatasetPickerValueAction not found";
+//                }
+//
+//                break;
+//            }
+//
+//        }
+//        if (!pluginfound)
+//        {
+//            qCritical() << "Scatterplot plugin not found with name:" << scatterplotNameForPC;
+//        }
+//    }
+//}
+
+void Computation::plotScatterplot(const QString& positionDatasetID, const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap)
 {
+    const QString scatterplotNameForPC = "Scatterplot PC";
+
     auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
 
     if (scatterplotViewFactory)
@@ -120,65 +208,7 @@ void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QSt
             {
                 pluginfound = true;
 
-                // set the position dataset
-                mv::gui::DatasetPickerAction* pointDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Position");
-                if (pointDatasetPickerValueAction)
-                {
-                    //if (!pointDatasetPickerValueAction->getCurrentDataset().isValid())
-                    {
-                        auto embeddingDataset = mv::data().getDataset(positionDatasetID);
-                        if (embeddingDataset.isValid())
-                        {
-                            pointDatasetPickerValueAction->setCurrentDataset(embeddingDataset);
-                        }
-                    }
-                }
-                else
-                {
-                    qWarning() << "Position dataset picker action not found in scatterplot plugin";
-                }
-
-                // set coloring
-                mv::gui::DatasetPickerAction* coloringDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Datasets/Color");
-                if (coloringDatasetPickerValueAction)
-                {
-                    {
-                        auto coloringDataset = mv::data().getDataset(colorDatasetID);
-                        if (coloringDataset.isValid())
-                        {
-                            coloringDatasetPickerValueAction->setCurrentDataset(coloringDataset);
-                        }
-                    }
-                }
-                else
-                {
-                    qWarning() << "Coloring dataset picker action not found in scatterplot plugin";
-                }
-
-                // set color map same as in the figure
-                mv::gui::OptionAction* coloringColorMapOptionsAction = findActionByPath<OptionAction>(plugin, "Settings/Coloring/1D Color map/Current color map");
-                if (coloringColorMapOptionsAction)
-                {
-                    coloringColorMapOptionsAction->setCurrentText(colorMap);
-                }
-                else
-                {
-                    qWarning() << "Coloring color map option action not found in scatterplot plugin";
-                }
-
-
-                // set opacity to 0 for non-target cell types
-                
-                mv::gui::DatasetPickerAction* opacityDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(plugin, "Settings/Plot/Point/Point opacity/Source dataset");
-                //if (opacityPickerValueAction && opacityDatasetPickerValueAction)
-                if (opacityDatasetPickerValueAction)
-                {
-                    auto opacityDataset = mv::data().getDataset(opacityDatasetID);
-                    opacityDatasetPickerValueAction->setCurrentDataset(opacityDataset);
-                }
-                else {
-                    qWarning() << "opacityDatasetPickerValueAction not found";
-                }
+                setupPCAScatterplot(positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
 
                 break;
             }
@@ -186,8 +216,85 @@ void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QSt
         }
         if (!pluginfound)
         {
-            qCritical() << "Scatterplot plugin not found with name:" << scatterplotNameForPC;
+            //qCritical() << "Scatterplot plugin not found with name:" << scatterplotNameForPC;
+            qDebug() << "Scatterplot plugin not found with name:" << scatterplotNameForPC << ", opening a new one";
+            //_pcScatterplotViewPlugin = mv::plugins().requestPlugin<ViewPlugin>("Scatterplot View");
+            _pcScatterplotViewPlugin = mv::plugins().requestViewPlugin("Scatterplot View");
+             //mv::plugins().requestPlugin("Scatterplot View");
+            if (_pcScatterplotViewPlugin)
+            {
+                qDebug() << "Scatterplot plugin opened with name:" << _pcScatterplotViewPlugin->getGuiName();
+                _pcScatterplotViewPlugin->getGuiNameAction().setString(scatterplotNameForPC);
+                qDebug() << "Scatterplot plugin GUI name set to:" << _pcScatterplotViewPlugin->getGuiName();
+
+                setupPCAScatterplot(positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
+            }
         }
     }
 }
 
+void Computation::setupPCAScatterplot(const QString& positionDatasetID,
+    const QString& colorDatasetID, const QString& celltypeClusterDatasetID,
+    const QString& opacityDatasetID, const QString& colorMap)
+{
+    // set the position dataset
+    mv::gui::DatasetPickerAction* pointDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(_pcScatterplotViewPlugin, "Settings/Datasets/Position");
+    if (pointDatasetPickerValueAction)
+    {
+        //if (!pointDatasetPickerValueAction->getCurrentDataset().isValid())
+        {
+            auto embeddingDataset = mv::data().getDataset(positionDatasetID);
+            if (embeddingDataset.isValid())
+            {
+                pointDatasetPickerValueAction->setCurrentDataset(embeddingDataset);
+            }
+        }
+    }
+    else
+    {
+        qWarning() << "Position dataset picker action not found in scatterplot plugin";
+    }
+
+    // set coloring
+    mv::gui::DatasetPickerAction* coloringDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(_pcScatterplotViewPlugin, "Settings/Datasets/Color");
+    if (coloringDatasetPickerValueAction)
+    {
+        {
+            auto coloringDataset = mv::data().getDataset(colorDatasetID);
+            if (coloringDataset.isValid())
+            {
+                coloringDatasetPickerValueAction->setCurrentDataset(coloringDataset);
+            }
+        }
+    }
+    else
+    {
+        qWarning() << "Coloring dataset picker action not found in scatterplot plugin";
+    }
+
+    // set color map same as in the figure
+    mv::gui::OptionAction* coloringColorMapOptionsAction = findActionByPath<OptionAction>(_pcScatterplotViewPlugin, "Settings/Coloring/1D Color map/Current color map");
+    if (coloringColorMapOptionsAction)
+    {
+        //coloringColorMapOptionsAction->setCurrentText("Viridis");
+        coloringColorMapOptionsAction->setCurrentText(colorMap);
+    }
+    else
+    {
+        qWarning() << "Coloring color map option action not found in scatterplot plugin";
+    }
+
+
+    // set opacity to 0 for non-target cell types
+
+    mv::gui::DatasetPickerAction* opacityDatasetPickerValueAction = findActionByPath<DatasetPickerAction>(_pcScatterplotViewPlugin, "Settings/Plot/Point/Point opacity/Source dataset");
+    //if (opacityPickerValueAction && opacityDatasetPickerValueAction)
+    if (opacityDatasetPickerValueAction)
+    {
+        auto opacityDataset = mv::data().getDataset(opacityDatasetID);
+        opacityDatasetPickerValueAction->setCurrentDataset(opacityDataset);
+    }
+    else {
+        qWarning() << "opacityDatasetPickerValueAction not found";
+    }
+}
