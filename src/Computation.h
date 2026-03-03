@@ -35,7 +35,7 @@ public:
         mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
         mv::Dataset<Clusters> positionClusterDataset);
 
-
+    // TODO: remove
     /*void plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID,
         const QString& colorDatasetID, const QString& celltypeClusterDatasetID,
         const QString& opacityDatasetID, const QString& colorMap);*/

@@ -14,7 +14,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _spatialDatasetAction(this, "Spatial dataset"),
     _spatialClusterDatasetAction(this, "Spatial cluster dataset"),
     _averagesClusterDatasetAction(this, "ATAC cluster dataset"),
-    _scatterplotForPCAction(this, "Scatterplot for PC"),
+    //_scatterplotForPCAction(this, "Scatterplot for PC"),// TODO: remove
 
     _featureDatasetAction(this, "Feature dataset"),
     _cellTypeDatasetAction(this, "Cell type dataset"),
@@ -37,7 +37,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
         return;
 
     setupDatasetPickerActions(_atacViewPlugin);
-    setupscatterplotForPCAction();
+    //setupscatterplotForPCAction();//TODO: remove
 
     _dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::ComboBox | OptionsAction::File);
     //_dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::File);
@@ -45,7 +45,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_spatialDatasetAction);
     addAction(&_spatialClusterDatasetAction);
     addAction(&_averagesClusterDatasetAction);
-    addAction(&_scatterplotForPCAction);
+    //addAction(&_scatterplotForPCAction);// TODO: remove
 
     addAction(&_featureDatasetAction);
     addAction(&_cellTypeDatasetAction);
@@ -129,20 +129,21 @@ void SettingsAction::setupCellTypeSelectionAction()
     _cellTypeSelectionAction.setOptions(cellTypeOptions);
 }
 
-void SettingsAction::setupscatterplotForPCAction()
-{
-    QStringList scatterplotNames = {};
-
-    auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
-    if (scatterplotViewFactory) {
-        for (auto plugin : mv::plugins().getPluginsByFactory(scatterplotViewFactory)) {
-            scatterplotNames.append(plugin->getGuiName());
-        }
-    }
-
-    _scatterplotForPCAction.setOptions(scatterplotNames);
-
-}
+//void SettingsAction::setupscatterplotForPCAction()
+//{
+// // TODO: remove
+//    QStringList scatterplotNames = {};
+//
+//    auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
+//    if (scatterplotViewFactory) {
+//        for (auto plugin : mv::plugins().getPluginsByFactory(scatterplotViewFactory)) {
+//            scatterplotNames.append(plugin->getGuiName());
+//        }
+//    }
+//
+//    _scatterplotForPCAction.setOptions(scatterplotNames);
+//
+//}
 
 void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
 {
@@ -151,7 +152,7 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
     _spatialDatasetAction.fromParentVariantMap(variantMap);
     _spatialClusterDatasetAction.fromParentVariantMap(variantMap);
     _averagesClusterDatasetAction.fromParentVariantMap(variantMap);
-    _scatterplotForPCAction.fromParentVariantMap(variantMap);
+    //_scatterplotForPCAction.fromParentVariantMap(variantMap);// TODO: remove
 
     _featureDatasetAction.fromParentVariantMap(variantMap);
     _cellTypeDatasetAction.fromParentVariantMap(variantMap);
@@ -170,7 +171,7 @@ QVariantMap SettingsAction::toVariantMap() const
     _spatialDatasetAction.insertIntoVariantMap(variantMap);
     _spatialClusterDatasetAction.insertIntoVariantMap(variantMap);
     _averagesClusterDatasetAction.insertIntoVariantMap(variantMap);
-    _scatterplotForPCAction.insertIntoVariantMap(variantMap);
+    //_scatterplotForPCAction.insertIntoVariantMap(variantMap);// TODO: remove
 
     _featureDatasetAction.insertIntoVariantMap(variantMap);
     _cellTypeDatasetAction.insertIntoVariantMap(variantMap);

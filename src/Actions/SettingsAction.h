@@ -4,7 +4,7 @@
 #include <actions/TriggerAction.h>
 #include <actions/DatasetPickerAction.h>
 #include <actions/OptionsAction.h>
-#include <actions/OptionAction.h>
+//#include <actions/OptionAction.h>
 #include <actions/ToggleAction.h>
 #include<actions/ColorMap1DAction.h>
 
@@ -62,7 +62,7 @@ public: // Action getters
     DatasetPickerAction& getSpatialDatasetAction() { return _spatialDatasetAction; }
     DatasetPickerAction& getSpatialClusterDatasetAction() { return _spatialClusterDatasetAction; }
     DatasetPickerAction& getAveragesClusterDatasetAction() { return _averagesClusterDatasetAction; }
-    OptionAction& getScatterplotForPCAction() { return _scatterplotForPCAction; }
+    //OptionAction& getScatterplotForPCAction() { return _scatterplotForPCAction; }// TODO: remove
 
     // need to be defined by user
     DatasetPickerAction& getFeatureDatasetAction() { return _featureDatasetAction; }
@@ -83,7 +83,7 @@ protected:
 
 public:
 
-    void setupscatterplotForPCAction();
+    //void setupscatterplotForPCAction();//TODO: remove
 
 private:
     ATACViewPlugin* _atacViewPlugin;
@@ -93,7 +93,7 @@ private:
     DatasetPickerAction                 _spatialDatasetAction; // obsm/spatial_cirro_grid_4col
     DatasetPickerAction                 _spatialClusterDatasetAction; // Cluster_v4_label
     DatasetPickerAction                 _averagesClusterDatasetAction; // Clusters (for ATAC averages) or cell_type (for RNA)
-    OptionAction                        _scatterplotForPCAction;// scatterplot View for a spatial map colored by PC projection 
+    //OptionAction                        _scatterplotForPCAction;// scatterplot View for a spatial map colored by PC projection // TODO: remove
 
 
     // need to be defined by user

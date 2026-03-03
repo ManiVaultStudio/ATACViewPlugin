@@ -50,9 +50,9 @@ void ATACViewPlugin::init()
         plotPCProjection();
         });
 
-    connect(&mv::plugins(), &AbstractPluginManager::pluginAdded, this, [this]() {
+    /*connect(&mv::plugins(), &AbstractPluginManager::pluginAdded, this, [this]() {
         _settingsAction.setupscatterplotForPCAction();
-        });
+        });*/ // TODO: remove, not needed now
 
     if (!mv::projects().isOpeningProject())
     { 
@@ -130,12 +130,13 @@ void ATACViewPlugin::projectPC()
 
 void ATACViewPlugin::plotPCProjection()
 {    
-    QString scatterplotNameForPC = _settingsAction.getScatterplotForPCAction().getCurrentText();
+    // TODO: remove
+    //QString scatterplotNameForPC = _settingsAction.getScatterplotForPCAction().getCurrentText();
 
-    if (scatterplotNameForPC.isEmpty())
+    /*if (scatterplotNameForPC.isEmpty())
     {
         qWarning() << "No scatterplot option selected for plotting PC projection";
-    }
+    }*/
 
     auto spatialDataset = _settingsAction.getSpatialDatasetAction().getCurrentDataset<Points>(); // coordinates
     const QString positionDatasetID = spatialDataset.getDatasetId();
@@ -227,6 +228,7 @@ void ATACViewPlugin::plotPCProjection()
 
     const QString colorMap = _settingsAction.getColorMapSelectionAction().getColorMap();
 
+    // TODO: remove
     //_computation.plotScatterplot(scatterplotNameForPC, positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
 
 
@@ -286,7 +288,7 @@ void ATACViewPlugin::addOtherActions()
     groupActionAdvanced->addAction(&_settingsAction.getSpatialDatasetAction());
     groupActionAdvanced->addAction(&_settingsAction.getSpatialClusterDatasetAction());
     groupActionAdvanced->addAction(&_settingsAction.getAveragesClusterDatasetAction());
-    groupActionAdvanced->addAction(&_settingsAction.getScatterplotForPCAction());
+    //groupActionAdvanced->addAction(&_settingsAction.getScatterplotForPCAction()); TODO: remove, not needed now
 
     groupActionAdvanced->setExpanded(false);
 

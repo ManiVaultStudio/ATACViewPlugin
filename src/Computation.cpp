@@ -107,7 +107,7 @@ void Computation::triggerProjectAverages(
     
 }
 
-
+// TODO: remove
 //void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID, const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap)
 //{
 //    auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
