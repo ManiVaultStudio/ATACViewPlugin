@@ -36,7 +36,8 @@ public:
         mv::Dataset<Clusters> positionClusterDataset);
 
     void plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID,
-        const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID);
+        const QString& colorDatasetID, const QString& celltypeClusterDatasetID,
+        const QString& opacityDatasetID, const QString& colorMap);
 
 
 private:

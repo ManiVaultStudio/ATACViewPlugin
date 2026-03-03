@@ -107,7 +107,7 @@ void Computation::triggerProjectAverages(
     
 }
 
-void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID, const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID)
+void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID, const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap)
 {
     auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
 
@@ -159,7 +159,7 @@ void Computation::plotScatterplot(const QString& scatterplotNameForPC, const QSt
                 mv::gui::OptionAction* coloringColorMapOptionsAction = findActionByPath<OptionAction>(plugin, "Settings/Coloring/1D Color map/Current color map");
                 if (coloringColorMapOptionsAction)
                 {
-                    coloringColorMapOptionsAction->setCurrentText("Viridis");
+                    coloringColorMapOptionsAction->setCurrentText(colorMap);
                 }
                 else
                 {

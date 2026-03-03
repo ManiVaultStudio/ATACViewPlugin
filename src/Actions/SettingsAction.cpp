@@ -18,9 +18,10 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 
     _featureDatasetAction(this, "Feature dataset"),
     _cellTypeDatasetAction(this, "Cell type dataset"),
-    _cellTypeSelectionAction(this, "Cell type selection"),
+    _cellTypeSelectionAction(this, "Cell type"),
     _dimensionSelectionAction(this),
     _qcPassAction(this, "QC pass"),
+    _colorMapSelectionAction(this, "Color map"),
     _startAnalysisAction(this, "Start analysis")
 {
     setText("Settings");
@@ -53,6 +54,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_startAnalysisAction);
 
     addAction(&_qcPassAction);
+    addAction(&_colorMapSelectionAction);
 
     //_spatialClusterDatasetAction.setToolTip()
 
@@ -157,6 +159,7 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
     _dimensionSelectionAction.fromParentVariantMap(variantMap);
 
     _qcPassAction.fromParentVariantMap(variantMap);
+    _colorMapSelectionAction.fromParentVariantMap(variantMap);
     
 }
 
@@ -175,7 +178,7 @@ QVariantMap SettingsAction::toVariantMap() const
     _dimensionSelectionAction.insertIntoVariantMap(variantMap);
 
     _qcPassAction.insertIntoVariantMap(variantMap);
-
+    _colorMapSelectionAction.insertIntoVariantMap(variantMap);
 
     return variantMap;
 }

@@ -225,7 +225,9 @@ void ATACViewPlugin::plotPCProjection()
 
     const QString opacityDatasetID = _opacityDataset.getDatasetId();
 
-    _computation.plotScatterplot(scatterplotNameForPC, positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID);
+    const QString colorMap = _settingsAction.getColorMapSelectionAction().getColorMap();
+
+    _computation.plotScatterplot(scatterplotNameForPC, positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
 
 }
 
@@ -265,6 +267,7 @@ void ATACViewPlugin::addOtherActions()
     groupActionPC->addAction(&_settingsAction.getCellTypeDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeSelectionAction());
     groupActionPC->addAction(&_settingsAction.getQcPassAction());
+    groupActionPC->addAction(&_settingsAction.getColorMapSelectionAction());
     groupActionPC->addAction(&_settingsAction.getStartAnalysisAction());
 
     groupActionPC->setExpanded(true);

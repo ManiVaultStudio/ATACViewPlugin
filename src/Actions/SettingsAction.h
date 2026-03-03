@@ -6,6 +6,7 @@
 #include <actions/OptionsAction.h>
 #include <actions/OptionAction.h>
 #include <actions/ToggleAction.h>
+#include<actions/ColorMap1DAction.h>
 
 #include <PointData/DimensionPickerAction.h>
 
@@ -72,6 +73,8 @@ public: // Action getters
 
     ToggleAction& getQcPassAction() { return _qcPassAction; }
 
+    ColorMap1DAction& getColorMapSelectionAction() { return _colorMapSelectionAction; }
+
 
 protected:
     void setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin);
@@ -100,6 +103,7 @@ private:
     OptionsAction                       _cellTypeSelectionAction; //e.g. Glut or GABA   
     TriggerAction                       _startAnalysisAction;
     DimensionSelectionAction            _dimensionSelectionAction;
+    ColorMap1DAction                    _colorMapSelectionAction;
 
 
     ToggleAction                        _qcPassAction;
