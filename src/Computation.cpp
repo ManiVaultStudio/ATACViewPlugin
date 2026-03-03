@@ -56,13 +56,19 @@ void Computation::triggerProjectAverages(
     mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
     mv::Dataset<Clusters> positionClusterDataset)
 {
-    if (!_projectAveragesPlugin) {
-        _projectAveragesPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("Project Averages", { inputDataset }, { outputDataset });
-    }
+    //if (!_projectAveragesPlugin) {
+    //    _projectAveragesPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("Project Averages", { inputDataset }, { outputDataset });
+    //}
 
-    if (!_projectAveragesPlugin) {
-        qCritical() << "Project Average Plugin not found in ManiVault!";
-        return;
+    //if (!_projectAveragesPlugin) {
+    //    qCritical() << "Project Average Plugin not found in ManiVault!";
+    //    return;
+    //}
+
+    auto checkAction = dynamic_cast<IntegralAction*>(outputDataset->findChildByPath("Settings/Averages Point Dataset"));
+    if (!checkAction) {
+        qDebug() << "Action not found, request a Project Averages plugin";
+        _projectAveragesPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("Project Averages", { inputDataset }, { outputDataset });
     }
     
     auto averagePointDatasetPickerAction = dynamic_cast<DatasetPickerAction*>(outputDataset->findChildByPath("Settings/Averages Point Dataset"));
