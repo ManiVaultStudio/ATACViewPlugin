@@ -162,6 +162,8 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
 
     _qcPassAction.fromParentVariantMap(variantMap);
     _colorMapSelectionAction.fromParentVariantMap(variantMap);
+
+    _showAdvancedSettingsAction.fromParentVariantMap(variantMap);
     
 }
 
@@ -181,6 +183,8 @@ QVariantMap SettingsAction::toVariantMap() const
 
     _qcPassAction.insertIntoVariantMap(variantMap);
     _colorMapSelectionAction.insertIntoVariantMap(variantMap);
+
+    _showAdvancedSettingsAction.insertIntoVariantMap(variantMap);
 
     return variantMap;
 }

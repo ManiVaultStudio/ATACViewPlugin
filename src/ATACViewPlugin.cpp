@@ -21,13 +21,21 @@ ATACViewPlugin::ATACViewPlugin(const PluginFactory* factory) :
         });
 
     connect(&_settingsAction.getShowAdvancedSettingsAction(), &ToggleAction::toggled, this, [this](bool checked) {
-        qDebug() << "Show advanced settings toggled:" << checked;
+        //qDebug() << "Show advanced settings toggled:" << checked;
 
-        //_groupActionAdvanced->setVisible(checked);
+        if (!_groupForAction || !_groupActionAdvanced)
+        {
+            //qDebug() << "Group for action or advanced group action is not initialized";
+            return; // safety check
+        }
+            
+        
         if (checked)
             _groupForAction->addGroupAction(_groupActionAdvanced);
         else
             _groupForAction->removeGroupAction(_groupActionAdvanced);
+
+        //qDebug() << "Advanced settings group action" << (checked ? "added to" : "removed from") << "group for action";
 
         });
 }
@@ -303,16 +311,20 @@ void ATACViewPlugin::addOtherActions()
 
     _groupActionAdvanced->setExpanded(false);
 
-    bool showAdvancedSettings = _settingsAction.getShowAdvancedSettingsAction().isChecked();
-
-    if (showAdvancedSettings)
-        _groupForAction->addGroupAction(_groupActionAdvanced);
-    // no need for else, this is called only when project is opened
-
-
     _groupForAction->addGroupAction(groupActionPC);
     _groupForAction->addGroupAction(groupActionPCAInputDimensions);
     //_groupForAction->addGroupAction(_groupActionAdvanced);
+
+    bool showAdvancedSettings = _settingsAction.getShowAdvancedSettingsAction().isChecked();
+
+    if (showAdvancedSettings)
+    {
+        _groupForAction->addGroupAction(_groupActionAdvanced);
+        //qDebug() << "addOtherActions(): advanced action is added";
+    }
+    //else
+        //qDebug() << "addOtherActions(): advanced action is not added, showAdvancedSettings:" << showAdvancedSettings;
+    // no need for else, this is called only when project is opened
 }
 // =============================================================================
 // Serialization
