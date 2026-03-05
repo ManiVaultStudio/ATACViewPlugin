@@ -29,9 +29,9 @@ void ATACViewPlugin::init()
 
     layout->setContentsMargins(0, 0, 0, 0);
 
-    groupForAction = new GroupsAction(this, "Settings");
+    _groupForAction = new GroupsAction(this, "Settings");
 
-    layout->addWidget(groupForAction->createWidget(&getWidget()));
+    layout->addWidget(_groupForAction->createWidget(&getWidget()));
 
     // Apply the layout
     getWidget().setLayout(layout);
@@ -260,7 +260,7 @@ void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
 
         groupAction->setExpanded(true);
 
-        groupForAction->addGroupAction(groupAction);
+        _groupForAction->addGroupAction(groupAction);
     }
 }
 
@@ -293,9 +293,9 @@ void ATACViewPlugin::addOtherActions()
     groupActionAdvanced->setExpanded(false);
 
 
-    groupForAction->addGroupAction(groupActionPC);
-    groupForAction->addGroupAction(groupActionPCAInputDimensions);
-    groupForAction->addGroupAction(groupActionAdvanced);
+    _groupForAction->addGroupAction(groupActionPC);
+    _groupForAction->addGroupAction(groupActionPCAInputDimensions);
+    _groupForAction->addGroupAction(groupActionAdvanced);
 }
 // =============================================================================
 // Serialization

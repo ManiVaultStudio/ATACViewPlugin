@@ -93,7 +93,7 @@ protected:
 
     SettingsAction              _settingsAction;         
 
-    GroupsAction*           groupForAction = nullptr;
+    GroupsAction*           _groupForAction = nullptr;
     
 };
 
