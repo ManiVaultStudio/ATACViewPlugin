@@ -15,7 +15,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _spatialClusterDatasetAction(this, "Spatial cluster dataset"),
     _averagesClusterDatasetAction(this, "ATAC cluster dataset"),
     //_scatterplotForPCAction(this, "Scatterplot for PC"),// TODO: remove
-
+    _showAdvancedSettingsAction(this, "Show advanced settings"),
     _featureDatasetAction(this, "Feature dataset"),
     _cellTypeDatasetAction(this, "Cell type dataset"),
     _cellTypeSelectionAction(this, "Cell type"),
@@ -55,6 +55,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 
     addAction(&_qcPassAction);
     addAction(&_colorMapSelectionAction);
+    addAction(&_showAdvancedSettingsAction);
 
     //_spatialClusterDatasetAction.setToolTip()
 

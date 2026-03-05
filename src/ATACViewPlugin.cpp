@@ -20,6 +20,16 @@ ATACViewPlugin::ATACViewPlugin(const PluginFactory* factory) :
         addOtherActions();
         });
 
+    connect(&_settingsAction.getShowAdvancedSettingsAction(), &ToggleAction::toggled, this, [this](bool checked) {
+        qDebug() << "Show advanced settings toggled:" << checked;
+
+        //_groupActionAdvanced->setVisible(checked);
+        if (checked)
+            _groupForAction->addGroupAction(_groupActionAdvanced);
+        else
+            _groupForAction->removeGroupAction(_groupActionAdvanced);
+
+        });
 }
 
 void ATACViewPlugin::init()
@@ -269,6 +279,7 @@ void ATACViewPlugin::addOtherActions()
 
     GroupAction* groupActionPC = new GroupAction(this, "PC coloring settings");
 
+    groupActionPC->addAction(&_settingsAction.getShowAdvancedSettingsAction());
     groupActionPC->addAction(&_settingsAction.getFeatureDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeSelectionAction());
@@ -283,19 +294,25 @@ void ATACViewPlugin::addOtherActions()
 
     groupActionPC->setExpanded(true);
 
-    GroupAction* groupActionAdvanced = new GroupAction(this, "Advanced settings"); // settings that are not likely to be used by the user
+    _groupActionAdvanced = new GroupAction(this, "Advanced settings"); // settings that are not likely to be used by the user
 
-    groupActionAdvanced->addAction(&_settingsAction.getSpatialDatasetAction());
-    groupActionAdvanced->addAction(&_settingsAction.getSpatialClusterDatasetAction());
-    groupActionAdvanced->addAction(&_settingsAction.getAveragesClusterDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getSpatialDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getSpatialClusterDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getAveragesClusterDatasetAction());
     //groupActionAdvanced->addAction(&_settingsAction.getScatterplotForPCAction()); TODO: remove, not needed now
 
-    groupActionAdvanced->setExpanded(false);
+    _groupActionAdvanced->setExpanded(false);
+
+    bool showAdvancedSettings = _settingsAction.getShowAdvancedSettingsAction().isChecked();
+
+    if (showAdvancedSettings)
+        _groupForAction->addGroupAction(_groupActionAdvanced);
+    // no need for else, this is called only when project is opened
 
 
     _groupForAction->addGroupAction(groupActionPC);
     _groupForAction->addGroupAction(groupActionPCAInputDimensions);
-    _groupForAction->addGroupAction(groupActionAdvanced);
+    //_groupForAction->addGroupAction(_groupActionAdvanced);
 }
 // =============================================================================
 // Serialization

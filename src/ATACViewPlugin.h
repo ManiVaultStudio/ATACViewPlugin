@@ -95,6 +95,7 @@ protected:
 
     GroupsAction*           _groupForAction = nullptr;
     
+    GroupAction*            _groupActionAdvanced = nullptr;
 };
 
 /**

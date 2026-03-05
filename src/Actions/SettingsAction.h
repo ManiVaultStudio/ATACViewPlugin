@@ -75,6 +75,8 @@ public: // Action getters
 
     ColorMap1DAction& getColorMapSelectionAction() { return _colorMapSelectionAction; }
 
+    ToggleAction& getShowAdvancedSettingsAction() { return _showAdvancedSettingsAction; }
+
 
 protected:
     void setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin);
@@ -107,5 +109,7 @@ private:
 
 
     ToggleAction                        _qcPassAction;
+
+    ToggleAction _showAdvancedSettingsAction; // whether to show advanced settings
 
 };
