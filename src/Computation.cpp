@@ -65,7 +65,7 @@ void Computation::triggerProjectAverages(
     //    return;
     //}
 
-    auto checkAction = dynamic_cast<IntegralAction*>(outputDataset->findChildByPath("Settings/Averages Point Dataset"));
+    auto checkAction = dynamic_cast<DatasetPickerAction*>(outputDataset->findChildByPath("Settings/Averages Point Dataset"));
     if (!checkAction) {
         qDebug() << "Action not found, request a Project Averages plugin";
         _projectAveragesPlugin = mv::plugins().requestPlugin<AnalysisPlugin>("Project Averages", { inputDataset }, { outputDataset });
