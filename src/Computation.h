@@ -9,14 +9,11 @@
 #include <actions/DatasetPickerAction.h>
 
 #include <QEventLoop>
-
 #include <vector>
 #include <QDebug>
 
 
 using namespace mv::gui;
-
-
 
 
 class Computation
@@ -34,12 +31,6 @@ public:
     void triggerProjectAverages(mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset,
         mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
         mv::Dataset<Clusters> positionClusterDataset);
-
-    // TODO: remove
-    /*void plotScatterplot(const QString& scatterplotNameForPC, const QString& positionDatasetID,
-        const QString& colorDatasetID, const QString& celltypeClusterDatasetID,
-        const QString& opacityDatasetID, const QString& colorMap);*/
-
 
     void plotScatterplot(const QString& positionDatasetID,
         const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap);

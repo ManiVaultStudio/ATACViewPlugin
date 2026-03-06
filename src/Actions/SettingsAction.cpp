@@ -1,7 +1,5 @@
 #include "SettingsAction.h"
-
 #include "src/ATACViewPlugin.h"
-
 
 
 #include <QHBoxLayout>
@@ -17,7 +15,6 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _rnaClusterDatasetAction(this, "RNA cluster dataset"),
     _atacAveragesDatasetAction(this, "ATAC averages dataset"),
     _rnaAveragesDatasetAction(this, "RNA averages dataset"),
-    //_scatterplotForPCAction(this, "Scatterplot for PC"),// TODO: remove
     _featureOptionAction(this, "Feature for PCA"),
     _showAdvancedSettingsAction(this, "Show advanced settings"),
     _cellTypeDatasetAction(this, "Cell type dataset"),
@@ -35,15 +32,12 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     setLabelSizingType(LabelSizingType::Auto);
 
 
-
     if (_atacViewPlugin == nullptr)
         return;
 
     setupDatasetPickerActions(_atacViewPlugin);
-    //setupscatterplotForPCAction();//TODO: remove
 
     _dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::ComboBox | OptionsAction::File);
-    //_dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::File);
 
     _featureOptionAction.initialize(QStringList({ "ATAC", "RNA" }), "ATAC");
     
@@ -53,7 +47,6 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_rnaClusterDatasetAction);
     addAction(&_atacAveragesDatasetAction);
     addAction(&_rnaAveragesDatasetAction);
-    //addAction(&_scatterplotForPCAction);// TODO: remove
 
     addAction(&_featureOptionAction);
     addAction(&_cellTypeDatasetAction);
@@ -77,13 +70,9 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _colorMapSelectionAction.setToolTip("Color map for PC");
     _showAdvancedSettingsAction.setToolTip("Show advanced settings");
 
-    //connect(&_spatialDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
-    //    qDebug() << "Selected spatial dataset changed in settings action";
-    //    //auto selectedDataset = _spatialDatasetAction.getCurrentDataset<Points>();
-    //    });
 
     connect(&_featureOptionAction, &OptionAction::currentTextChanged, this, [this]() {
-        qDebug() << "Feature option changes";
+        //qDebug() << "Feature option changes";
 
         if (_featureOptionAction.getCurrentText() == "ATAC")
         {
@@ -96,7 +85,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
             }
 
             _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
-            qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
+            //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
         }
         else if (_featureOptionAction.getCurrentText() == "RNA")
         {
@@ -109,37 +98,21 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
             }
 
             _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
-            qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
+            //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
         }
         });
 
-
-    //connect(&_featureDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
-    //    //qDebug() << "Selected dataset changed in settings action";
-    //    auto selectedDataset = _featureDatasetAction.getCurrentDataset<Points>();
-    //    _dimensionSelectionAction.getPickerAction().setPointsDataset(selectedDataset);
-    //    });
-
     connect(&_cellTypeDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
-
         //qDebug() << "Selected cell type dataset changed in settings action";
 
         setupCellTypeSelectionAction();
         });
-
-    //connect(&_cellTypeSelectionAction, &OptionsAction::selectedOptionsChanged, this, [this]() {
-    //    qDebug() << "Selected cell type(s) changed in settings action";
-
-    //    // TODO: change the view or only change the view when start analysis is triggered?
-    //    });
-
 
     connect(&_startAnalysisAction, &TriggerAction::triggered, this, [this]() {
         //qDebug() << "Start analysis triggered in settings action";
         _atacViewPlugin->computePCA();
         });
 
-   
 }
 
 void SettingsAction::setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin)
@@ -188,22 +161,6 @@ void SettingsAction::setupCellTypeSelectionAction()
     _cellTypeSelectionAction.setOptions(cellTypeOptions);
 }
 
-//void SettingsAction::setupscatterplotForPCAction()
-//{
-// // TODO: remove
-//    QStringList scatterplotNames = {};
-//
-//    auto scatterplotViewFactory = mv::plugins().getPluginFactory("Scatterplot View");
-//    if (scatterplotViewFactory) {
-//        for (auto plugin : mv::plugins().getPluginsByFactory(scatterplotViewFactory)) {
-//            scatterplotNames.append(plugin->getGuiName());
-//        }
-//    }
-//
-//    _scatterplotForPCAction.setOptions(scatterplotNames);
-//
-//}
-
 void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
 {
     WidgetAction::fromVariantMap(variantMap);
@@ -214,7 +171,6 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
     _rnaClusterDatasetAction.fromParentVariantMap(variantMap);
     _atacAveragesDatasetAction.fromParentVariantMap(variantMap);
     _rnaAveragesDatasetAction.fromParentVariantMap(variantMap);
-    //_scatterplotForPCAction.fromParentVariantMap(variantMap);// TODO: remove
 
     _featureOptionAction.fromParentVariantMap(variantMap);
     _cellTypeDatasetAction.fromParentVariantMap(variantMap);
@@ -238,7 +194,6 @@ QVariantMap SettingsAction::toVariantMap() const
     _rnaClusterDatasetAction.insertIntoVariantMap(variantMap);
     _atacAveragesDatasetAction.insertIntoVariantMap(variantMap);
     _rnaAveragesDatasetAction.insertIntoVariantMap(variantMap);
-    //_scatterplotForPCAction.insertIntoVariantMap(variantMap);// TODO: remove
  
     _featureOptionAction.insertIntoVariantMap(variantMap);
     _cellTypeDatasetAction.insertIntoVariantMap(variantMap);

@@ -139,7 +139,6 @@ void ATACViewPlugin::projectPC()
     auto spatialDataset = _settingsAction.getSpatialDatasetAction().getCurrentDataset<Points>();
     auto positionClusterDataset = _settingsAction.getSpatialClusterDatasetAction().getCurrentDataset<Clusters>();
 
-    //auto averageClusterDataset = _settingsAction.getAveragesClusterDatasetAction().getCurrentDataset <Clusters>();
     mv::Dataset<Clusters> featureClusterDataset;
     const QString featureMatrix = _settingsAction.getFeatureOptionAction().getCurrentText();
     if (featureMatrix == "ATAC")
@@ -165,14 +164,6 @@ void ATACViewPlugin::projectPC()
 
 void ATACViewPlugin::plotPCProjection()
 {    
-    // TODO: remove
-    //QString scatterplotNameForPC = _settingsAction.getScatterplotForPCAction().getCurrentText();
-
-    /*if (scatterplotNameForPC.isEmpty())
-    {
-        qWarning() << "No scatterplot option selected for plotting PC projection";
-    }*/
-
     auto spatialDataset = _settingsAction.getSpatialDatasetAction().getCurrentDataset<Points>(); // coordinates
     const QString positionDatasetID = spatialDataset.getDatasetId();
     
@@ -263,10 +254,6 @@ void ATACViewPlugin::plotPCProjection()
 
     const QString colorMap = _settingsAction.getColorMapSelectionAction().getColorMap();
 
-    // TODO: remove
-    //_computation.plotScatterplot(scatterplotNameForPC, positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
-
-
     _computation.plotScatterplot(positionDatasetID, colorDatasetID, celltypeClusterDatasetID, opacityDatasetID, colorMap);
 
 
@@ -306,7 +293,6 @@ void ATACViewPlugin::addOtherActions()
 
     groupActionPC->addAction(&_settingsAction.getShowAdvancedSettingsAction());
     groupActionPC->addAction(&_settingsAction.getFeatureOptionAction());
-    //groupActionPC->addAction(&_settingsAction.getFeatureDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeSelectionAction());
     groupActionPC->addAction(&_settingsAction.getQcPassAction());
@@ -328,13 +314,11 @@ void ATACViewPlugin::addOtherActions()
     _groupActionAdvanced->addAction(&_settingsAction.getATACClusterDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getRNAAveragesDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getRNAClusterDatasetAction());
-    //groupActionAdvanced->addAction(&_settingsAction.getScatterplotForPCAction()); TODO: remove, not needed now
 
     _groupActionAdvanced->setExpanded(false);
 
     _groupForAction->addGroupAction(groupActionPC);
     _groupForAction->addGroupAction(groupActionPCAInputDimensions);
-    //_groupForAction->addGroupAction(_groupActionAdvanced);
 
     bool showAdvancedSettings = _settingsAction.getShowAdvancedSettingsAction().isChecked();
 
@@ -343,8 +327,6 @@ void ATACViewPlugin::addOtherActions()
         _groupForAction->addGroupAction(_groupActionAdvanced);
         //qDebug() << "addOtherActions(): advanced action is added";
     }
-    //else
-        //qDebug() << "addOtherActions(): advanced action is not added, showAdvancedSettings:" << showAdvancedSettings;
     // no need for else, this is called only when project is opened
 }
 // =============================================================================
