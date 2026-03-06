@@ -74,32 +74,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     connect(&_featureOptionAction, &OptionAction::currentTextChanged, this, [this]() {
         //qDebug() << "Feature option changes";
 
-        if (_featureOptionAction.getCurrentText() == "ATAC")
-        {
-            auto featureDataset = _atacAveragesDatasetAction.getCurrentDataset<Points>();
-
-            if (!featureDataset.isValid())
-            {
-                qDebug() << "No valid feature dataset for ATAC";
-                return;
-            }
-
-            _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
-            //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
-        }
-        else if (_featureOptionAction.getCurrentText() == "RNA")
-        {
-            auto featureDataset = _rnaAveragesDatasetAction.getCurrentDataset<Points>();
-
-            if (!featureDataset.isValid())
-            {
-                qDebug() << "No valid feature dataset for RNA";
-                return;
-            }
-
-            _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
-            //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
-        }
+        setUpDimensionSelectionAction();
         });
 
     connect(&_cellTypeDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
@@ -113,6 +88,17 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
         _atacViewPlugin->computePCA();
         });
 
+    connect(&_atacAveragesDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
+        qDebug() << "_atacAveragesDatasetAction currentIndexChanged";
+
+        setUpDimensionSelectionAction();
+        });
+
+    connect(&_rnaAveragesDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
+        qDebug() << "_rnaAveragesDatasetAction currentIndexChanged";
+
+        setUpDimensionSelectionAction();
+        });
 }
 
 void SettingsAction::setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin)
@@ -159,6 +145,36 @@ void SettingsAction::setupCellTypeSelectionAction()
             cellTypeOptions.append(cluster.getName());
     }
     _cellTypeSelectionAction.setOptions(cellTypeOptions);
+}
+
+void SettingsAction::setUpDimensionSelectionAction()
+{
+    if (_featureOptionAction.getCurrentText() == "ATAC")
+    {
+        auto featureDataset = _atacAveragesDatasetAction.getCurrentDataset<Points>();
+
+        if (!featureDataset.isValid())
+        {
+            qDebug() << "setUpDimensionSelectionAction() No valid feature dataset for ATAC";
+            return;
+        }
+
+        _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
+        //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
+    }
+    else if (_featureOptionAction.getCurrentText() == "RNA")
+    {
+        auto featureDataset = _rnaAveragesDatasetAction.getCurrentDataset<Points>();
+
+        if (!featureDataset.isValid())
+        {
+            qDebug() << "setUpDimensionSelectionAction() No valid feature dataset for RNA";
+            return;
+        }
+
+        _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
+        //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
+    }
 }
 
 void SettingsAction::fromVariantMap(const QVariantMap& variantMap)

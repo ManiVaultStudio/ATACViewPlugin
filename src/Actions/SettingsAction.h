@@ -81,6 +81,8 @@ protected:
 
     void setupCellTypeSelectionAction();
 
+    void setUpDimensionSelectionAction();
+
 private:
     ATACViewPlugin* _atacViewPlugin;
 
