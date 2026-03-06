@@ -113,6 +113,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
         }
         });
 
+
     //connect(&_featureDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
     //    //qDebug() << "Selected dataset changed in settings action";
     //    auto selectedDataset = _featureDatasetAction.getCurrentDataset<Points>();
@@ -210,10 +211,12 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
     _spatialDatasetAction.fromParentVariantMap(variantMap);
     _spatialClusterDatasetAction.fromParentVariantMap(variantMap);
     _atacClusterDatasetAction.fromParentVariantMap(variantMap);
-
+    _rnaClusterDatasetAction.fromParentVariantMap(variantMap);
+    _atacAveragesDatasetAction.fromParentVariantMap(variantMap);
+    _rnaAveragesDatasetAction.fromParentVariantMap(variantMap);
     //_scatterplotForPCAction.fromParentVariantMap(variantMap);// TODO: remove
 
-    
+    _featureOptionAction.fromParentVariantMap(variantMap);
     _cellTypeDatasetAction.fromParentVariantMap(variantMap);
     _cellTypeSelectionAction.fromParentVariantMap(variantMap);
     _dimensionSelectionAction.fromParentVariantMap(variantMap);
@@ -232,9 +235,12 @@ QVariantMap SettingsAction::toVariantMap() const
     _spatialDatasetAction.insertIntoVariantMap(variantMap);
     _spatialClusterDatasetAction.insertIntoVariantMap(variantMap);
     _atacClusterDatasetAction.insertIntoVariantMap(variantMap);
+    _rnaClusterDatasetAction.insertIntoVariantMap(variantMap);
+    _atacAveragesDatasetAction.insertIntoVariantMap(variantMap);
+    _rnaAveragesDatasetAction.insertIntoVariantMap(variantMap);
     //_scatterplotForPCAction.insertIntoVariantMap(variantMap);// TODO: remove
-
-   
+ 
+    _featureOptionAction.insertIntoVariantMap(variantMap);
     _cellTypeDatasetAction.insertIntoVariantMap(variantMap);
     _cellTypeSelectionAction.insertIntoVariantMap(variantMap);
     _dimensionSelectionAction.insertIntoVariantMap(variantMap);
