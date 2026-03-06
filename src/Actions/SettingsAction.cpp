@@ -15,6 +15,9 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _rnaClusterDatasetAction(this, "RNA cluster dataset"),
     _atacAveragesDatasetAction(this, "ATAC averages dataset"),
     _rnaAveragesDatasetAction(this, "RNA averages dataset"),
+
+    _pcSelectionAction(this, "PC"),
+
     _featureOptionAction(this, "Data"),
     _showAdvancedSettingsAction(this, "Show advanced settings"),
     _cellTypeDatasetAction(this, "Annotation source"),
@@ -40,6 +43,8 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::ComboBox | OptionsAction::File);
 
     _featureOptionAction.initialize(QStringList({ "ATAC", "RNA" }), "ATAC");
+
+    
     
     addAction(&_spatialDatasetAction);
     addAction(&_spatialClusterDatasetAction);
@@ -47,6 +52,8 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_rnaClusterDatasetAction);
     addAction(&_atacAveragesDatasetAction);
     addAction(&_rnaAveragesDatasetAction);
+
+    addAction(&_pcSelectionAction);
 
     addAction(&_featureOptionAction);
     addAction(&_cellTypeDatasetAction);
@@ -58,12 +65,17 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_colorMapSelectionAction);
     addAction(&_showAdvancedSettingsAction);
 
+    //_pcSelectionAction.setCurrentDimensionIndex(0); //initialize
+
     _spatialDatasetAction.setToolTip("Spatial map");
     _spatialClusterDatasetAction.setToolTip("Cluster annotations for spatial cells used as the projection base");
     _atacClusterDatasetAction.setToolTip("Cluster annotations for ATAC data used to project cluster averages");
     _rnaClusterDatasetAction.setToolTip("Cluster annotations for RNA data used to project cluster averages");
     _atacAveragesDatasetAction.setToolTip("Cluster-by-peak matrix");
     _rnaAveragesDatasetAction.setToolTip("Cluster-by-gene matrix");
+
+    _pcSelectionAction.setToolTip("Select PC for coloring");
+
     _cellTypeDatasetAction.setToolTip("Select annotation source");
     _cellTypeSelectionAction.setToolTip("Select cell types to display"); 
     _qcPassAction.setToolTip("Show QC-passed cells only");
@@ -188,6 +200,8 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
     _atacAveragesDatasetAction.fromParentVariantMap(variantMap);
     _rnaAveragesDatasetAction.fromParentVariantMap(variantMap);
 
+    _pcSelectionAction.fromParentVariantMap(variantMap);
+
     _featureOptionAction.fromParentVariantMap(variantMap);
     _cellTypeDatasetAction.fromParentVariantMap(variantMap);
     _cellTypeSelectionAction.fromParentVariantMap(variantMap);
@@ -210,6 +224,8 @@ QVariantMap SettingsAction::toVariantMap() const
     _rnaClusterDatasetAction.insertIntoVariantMap(variantMap);
     _atacAveragesDatasetAction.insertIntoVariantMap(variantMap);
     _rnaAveragesDatasetAction.insertIntoVariantMap(variantMap);
+
+    _pcSelectionAction.insertIntoVariantMap(variantMap);
  
     _featureOptionAction.insertIntoVariantMap(variantMap);
     _cellTypeDatasetAction.insertIntoVariantMap(variantMap);

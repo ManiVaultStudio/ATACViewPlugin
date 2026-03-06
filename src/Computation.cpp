@@ -44,7 +44,7 @@ void Computation::triggerPCA(mv::Dataset<Points> inputDataset, mv::Dataset<Point
 void Computation::triggerProjectAverages(
     mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset,
     mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
-    mv::Dataset<Clusters> positionClusterDataset)
+    mv::Dataset<Clusters> positionClusterDataset, const int pcIndex)
 {
     // check if analysis plugin attached to the output dataset
     auto checkAction = dynamic_cast<DatasetPickerAction*>(outputDataset->findChildByPath("Settings/Averages Point Dataset"));
@@ -73,6 +73,13 @@ void Computation::triggerProjectAverages(
         return;
     }
     positionClusterDatasetPickerAction->setCurrentDataset(positionClusterDataset);
+
+    auto averagesDatasetDimension = dynamic_cast<DimensionPickerAction*>(outputDataset->findChildByPath("Settings/Averages Dataset Dimension"));
+    if (!averagesDatasetDimension) {
+        qCritical() << "Averages Dataset Dimension picker action not found in projection output dataset";
+        return;
+    }
+    averagesDatasetDimension->setCurrentDimensionIndex(pcIndex);
 
     auto startAction = dynamic_cast<TriggerAction*>(outputDataset->findChildByPath("Settings/Update Trigger Action"));
     if (startAction) {

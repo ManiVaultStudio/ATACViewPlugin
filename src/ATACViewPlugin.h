@@ -64,6 +64,11 @@ private:
 
     void addOtherActions();
 
+public:
+
+    /** Get smart pointer  */
+    mv::Dataset<Points>& getPCAOutputDataset() { return _pcaOutputDataset; }
+
 public: // Serialization
     /**
     * Load plugin from variant map

@@ -61,16 +61,16 @@ void ATACViewPlugin::init()
         projectPC();
         });
 
+    connect(&_pcaOutputDataset, &Dataset<Points>::dataDimensionsChanged, this, [this]() {
+        _settingsAction.getPCSelectionAction().setPointsDataset(_pcaOutputDataset);
+        });
+
     connect(&_projectionOutputDataset, &Dataset<Points>::dataChanged, this, [this]() {
         //qDebug() << "Projection output dataset data changed";
         
         // assume that projection finished
         plotPCProjection();
         });
-
-    /*connect(&mv::plugins(), &AbstractPluginManager::pluginAdded, this, [this]() {
-        _settingsAction.setupscatterplotForPCAction();
-        });*/ // TODO: remove, not needed now
 
     if (!mv::projects().isOpeningProject())
     { 
@@ -133,8 +133,14 @@ void ATACViewPlugin::computePCA()
 
 void ATACViewPlugin::projectPC()
 {
-    std::vector<float> projectedData;
-    _pcaOutputDataset->extractDataForDimension(projectedData, 0); // PC1
+    int pcIdx = _settingsAction.getPCSelectionAction().getCurrentDimensionIndex();
+    qDebug() << "select PC" << pcIdx;
+    //safety check if pcIndex is avaliable
+    if (pcIdx < 0 || pcIdx > _pcaOutputDataset->getNumDimensions())
+    {
+        pcIdx = 0; // use PC1
+        qDebug() << "pcIdx < 0 || pcIdx > " << _pcaOutputDataset->getNumDimensions() << "use PC1";
+    }
 
     auto spatialDataset = _settingsAction.getSpatialDatasetAction().getCurrentDataset<Points>();
     auto positionClusterDataset = _settingsAction.getSpatialClusterDatasetAction().getCurrentDataset<Clusters>();
@@ -158,7 +164,7 @@ void ATACViewPlugin::projectPC()
         return;
     }
 
-    _computation.triggerProjectAverages(spatialDataset, _projectionOutputDataset, _pcaOutputDataset, featureClusterDataset, positionClusterDataset);
+    _computation.triggerProjectAverages(spatialDataset, _projectionOutputDataset, _pcaOutputDataset, featureClusterDataset, positionClusterDataset, pcIdx);
     
 }
 
@@ -314,6 +320,7 @@ void ATACViewPlugin::addOtherActions()
     _groupActionAdvanced->addAction(&_settingsAction.getATACClusterDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getRNAAveragesDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getRNAClusterDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getPCSelectionAction());
 
     _groupActionAdvanced->setExpanded(false);
 
@@ -329,6 +336,7 @@ void ATACViewPlugin::addOtherActions()
     }
     // no need for else, this is called only when project is opened
 }
+
 // =============================================================================
 // Serialization
 // =============================================================================

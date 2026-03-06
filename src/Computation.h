@@ -8,6 +8,8 @@
 #include <actions/TriggerAction.h>
 #include <actions/DatasetPickerAction.h>
 
+#include <PointData/DimensionPickerAction.h>
+
 #include <QEventLoop>
 #include <vector>
 #include <QDebug>
@@ -30,7 +32,7 @@ public:
 
     void triggerProjectAverages(mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset,
         mv::Dataset<Points> averagePointDataset, mv::Dataset<Clusters> averageClusterDataset,
-        mv::Dataset<Clusters> positionClusterDataset);
+        mv::Dataset<Clusters> positionClusterDataset, const int pcIndex);
 
     void plotScatterplot(const QString& positionDatasetID,
         const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap);

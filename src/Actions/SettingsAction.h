@@ -65,6 +65,8 @@ public: // Action getters
     DatasetPickerAction& getATACAveragesDatasetAction() { return _atacAveragesDatasetAction; }
     DatasetPickerAction& getRNAAveragesDatasetAction() { return _rnaAveragesDatasetAction; }
 
+    DimensionPickerAction& getPCSelectionAction() { return _pcSelectionAction; }
+
     // PC coloring
     ToggleAction& getShowAdvancedSettingsAction() { return _showAdvancedSettingsAction; }
     OptionAction& getFeatureOptionAction() { return _featureOptionAction; }
@@ -94,6 +96,7 @@ private:
     DatasetPickerAction                 _atacAveragesDatasetAction; // avgExprDataset (for ATAC)
     DatasetPickerAction                 _rnaAveragesDatasetAction; // marm
 
+    DimensionPickerAction                        _pcSelectionAction; // which pc to display, e.g. PC1
 
     // PC coloring 
     OptionAction                        _featureOptionAction;
