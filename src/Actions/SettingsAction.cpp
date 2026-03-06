@@ -57,7 +57,15 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_colorMapSelectionAction);
     addAction(&_showAdvancedSettingsAction);
 
-    //_spatialClusterDatasetAction.setToolTip()
+    _spatialDatasetAction.setToolTip("Spatial map");
+    _spatialClusterDatasetAction.setToolTip("Cluster annotations for spatial cells used as the projection base");
+    _averagesClusterDatasetAction.setToolTip("Cluster annotations for feature data used to project cluster averages");
+    _featureDatasetAction.setToolTip("Feature matrix (ATAC/RNA)");
+    _cellTypeDatasetAction.setToolTip("Cell type annotations");
+    _cellTypeSelectionAction.setToolTip("Select cell types to display"); 
+    _qcPassAction.setToolTip("Show QC-passed cells only");
+    _colorMapSelectionAction.setToolTip("Color map for PC");
+    _showAdvancedSettingsAction.setToolTip("Show advanced settings");
 
     //connect(&_spatialDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
     //    qDebug() << "Selected spatial dataset changed in settings action";
