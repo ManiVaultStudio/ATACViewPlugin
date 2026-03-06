@@ -15,10 +15,10 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _rnaClusterDatasetAction(this, "RNA cluster dataset"),
     _atacAveragesDatasetAction(this, "ATAC averages dataset"),
     _rnaAveragesDatasetAction(this, "RNA averages dataset"),
-    _featureOptionAction(this, "Feature for PCA"),
+    _featureOptionAction(this, "Data"),
     _showAdvancedSettingsAction(this, "Show advanced settings"),
-    _cellTypeDatasetAction(this, "Cell type dataset"),
-    _cellTypeSelectionAction(this, "Cell type"),
+    _cellTypeDatasetAction(this, "Annotation source"),
+    _cellTypeSelectionAction(this, "Visible types"),
     _dimensionSelectionAction(this),
     _qcPassAction(this, "QC pass"),
     _colorMapSelectionAction(this, "Color map"),
@@ -64,7 +64,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _rnaClusterDatasetAction.setToolTip("Cluster annotations for RNA data used to project cluster averages");
     _atacAveragesDatasetAction.setToolTip("Cluster-by-peak matrix");
     _rnaAveragesDatasetAction.setToolTip("Cluster-by-gene matrix");
-    _cellTypeDatasetAction.setToolTip("Cell type annotations");
+    _cellTypeDatasetAction.setToolTip("Select annotation source");
     _cellTypeSelectionAction.setToolTip("Select cell types to display"); 
     _qcPassAction.setToolTip("Show QC-passed cells only");
     _colorMapSelectionAction.setToolTip("Color map for PC");
