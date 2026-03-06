@@ -13,10 +13,13 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _atacViewPlugin(dynamic_cast<ATACViewPlugin*>(parent)),
     _spatialDatasetAction(this, "Spatial dataset"),
     _spatialClusterDatasetAction(this, "Spatial cluster dataset"),
-    _averagesClusterDatasetAction(this, "ATAC cluster dataset"),
+    _atacClusterDatasetAction(this, "ATAC cluster dataset"),
+    _rnaClusterDatasetAction(this, "RNA cluster dataset"),
+    _atacAveragesDatasetAction(this, "ATAC averages dataset"),
+    _rnaAveragesDatasetAction(this, "RNA averages dataset"),
     //_scatterplotForPCAction(this, "Scatterplot for PC"),// TODO: remove
+    _featureOptionAction(this, "Feature for PCA"),
     _showAdvancedSettingsAction(this, "Show advanced settings"),
-    _featureDatasetAction(this, "Feature dataset"),
     _cellTypeDatasetAction(this, "Cell type dataset"),
     _cellTypeSelectionAction(this, "Cell type"),
     _dimensionSelectionAction(this),
@@ -41,13 +44,18 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 
     _dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::ComboBox | OptionsAction::File);
     //_dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::File);
+
+    _featureOptionAction.initialize(QStringList({ "ATAC", "RNA" }), "ATAC");
     
     addAction(&_spatialDatasetAction);
     addAction(&_spatialClusterDatasetAction);
-    addAction(&_averagesClusterDatasetAction);
+    addAction(&_atacClusterDatasetAction);
+    addAction(&_rnaClusterDatasetAction);
+    addAction(&_atacAveragesDatasetAction);
+    addAction(&_rnaAveragesDatasetAction);
     //addAction(&_scatterplotForPCAction);// TODO: remove
 
-    addAction(&_featureDatasetAction);
+    addAction(&_featureOptionAction);
     addAction(&_cellTypeDatasetAction);
     addAction(&_cellTypeSelectionAction);
     addAction(&_dimensionSelectionAction);
@@ -59,8 +67,10 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 
     _spatialDatasetAction.setToolTip("Spatial map");
     _spatialClusterDatasetAction.setToolTip("Cluster annotations for spatial cells used as the projection base");
-    _averagesClusterDatasetAction.setToolTip("Cluster annotations for feature data used to project cluster averages");
-    _featureDatasetAction.setToolTip("Feature matrix (ATAC/RNA)");
+    _atacClusterDatasetAction.setToolTip("Cluster annotations for ATAC data used to project cluster averages");
+    _rnaClusterDatasetAction.setToolTip("Cluster annotations for RNA data used to project cluster averages");
+    _atacAveragesDatasetAction.setToolTip("Cluster-by-peak matrix");
+    _rnaAveragesDatasetAction.setToolTip("Cluster-by-gene matrix");
     _cellTypeDatasetAction.setToolTip("Cell type annotations");
     _cellTypeSelectionAction.setToolTip("Select cell types to display"); 
     _qcPassAction.setToolTip("Show QC-passed cells only");
@@ -72,11 +82,42 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     //    //auto selectedDataset = _spatialDatasetAction.getCurrentDataset<Points>();
     //    });
 
-    connect(&_featureDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
-        //qDebug() << "Selected dataset changed in settings action";
-        auto selectedDataset = _featureDatasetAction.getCurrentDataset<Points>();
-        _dimensionSelectionAction.getPickerAction().setPointsDataset(selectedDataset);
+    connect(&_featureOptionAction, &OptionAction::currentTextChanged, this, [this]() {
+        qDebug() << "Feature option changes";
+
+        if (_featureOptionAction.getCurrentText() == "ATAC")
+        {
+            auto featureDataset = _atacAveragesDatasetAction.getCurrentDataset<Points>();
+
+            if (!featureDataset.isValid())
+            {
+                qDebug() << "No valid feature dataset for ATAC";
+                return;
+            }
+
+            _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
+            qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
+        }
+        else if (_featureOptionAction.getCurrentText() == "RNA")
+        {
+            auto featureDataset = _rnaAveragesDatasetAction.getCurrentDataset<Points>();
+
+            if (!featureDataset.isValid())
+            {
+                qDebug() << "No valid feature dataset for RNA";
+                return;
+            }
+
+            _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
+            qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
+        }
         });
+
+    //connect(&_featureDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
+    //    //qDebug() << "Selected dataset changed in settings action";
+    //    auto selectedDataset = _featureDatasetAction.getCurrentDataset<Points>();
+    //    _dimensionSelectionAction.getPickerAction().setPointsDataset(selectedDataset);
+    //    });
 
     connect(&_cellTypeDatasetAction, &DatasetPickerAction::currentIndexChanged, this, [this]() {
 
@@ -111,11 +152,19 @@ void SettingsAction::setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin)
         return dataset->getDataType() == ClusterType;
         });
 
-    _averagesClusterDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
+    _atacClusterDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
         return dataset->getDataType() == ClusterType;
         });
 
-    _featureDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
+    _rnaClusterDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
+        return dataset->getDataType() == ClusterType;
+        });
+
+    _atacAveragesDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
+        return dataset->getDataType() == PointType;
+        });
+
+    _rnaAveragesDatasetAction.setFilterFunction([this](mv::Dataset<DatasetImpl> dataset) -> bool {
         return dataset->getDataType() == PointType;
         });
 
@@ -160,10 +209,11 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
 
     _spatialDatasetAction.fromParentVariantMap(variantMap);
     _spatialClusterDatasetAction.fromParentVariantMap(variantMap);
-    _averagesClusterDatasetAction.fromParentVariantMap(variantMap);
+    _atacClusterDatasetAction.fromParentVariantMap(variantMap);
+
     //_scatterplotForPCAction.fromParentVariantMap(variantMap);// TODO: remove
 
-    _featureDatasetAction.fromParentVariantMap(variantMap);
+    
     _cellTypeDatasetAction.fromParentVariantMap(variantMap);
     _cellTypeSelectionAction.fromParentVariantMap(variantMap);
     _dimensionSelectionAction.fromParentVariantMap(variantMap);
@@ -181,10 +231,10 @@ QVariantMap SettingsAction::toVariantMap() const
 
     _spatialDatasetAction.insertIntoVariantMap(variantMap);
     _spatialClusterDatasetAction.insertIntoVariantMap(variantMap);
-    _averagesClusterDatasetAction.insertIntoVariantMap(variantMap);
+    _atacClusterDatasetAction.insertIntoVariantMap(variantMap);
     //_scatterplotForPCAction.insertIntoVariantMap(variantMap);// TODO: remove
 
-    _featureDatasetAction.insertIntoVariantMap(variantMap);
+   
     _cellTypeDatasetAction.insertIntoVariantMap(variantMap);
     _cellTypeSelectionAction.insertIntoVariantMap(variantMap);
     _dimensionSelectionAction.insertIntoVariantMap(variantMap);

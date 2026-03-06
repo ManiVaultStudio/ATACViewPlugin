@@ -81,16 +81,26 @@ void ATACViewPlugin::init()
 
 void ATACViewPlugin::computePCA()
 {
-    auto featureDataset = _settingsAction.getFeatureDatasetAction().getCurrentDataset<Points>();
+    mv::Dataset<Points> featureDataset;
+
+    const QString featureMatrix = _settingsAction.getFeatureOptionAction().getCurrentText();
+    if (featureMatrix == "ATAC")
+        featureDataset = _settingsAction.getATACAveragesDatasetAction().getCurrentDataset<Points>();
+    else if (featureMatrix == "RNA")
+        featureDataset = _settingsAction.getRNAAveragesDatasetAction().getCurrentDataset<Points>();
+
+    //auto featureDataset = _settingsAction.getFeatureDatasetAction().getCurrentDataset<Points>();
+    
     if (!featureDataset.isValid())
         {
         qDebug() << "No valid feature dataset selected for PCA computation";
+        QMessageBox::warning(nullptr, "Warning", "No valid feature dataset selected for PCA computation");
         return;
     }
 
     std::vector<bool> enabledDimensions = _settingsAction.getDimensionSelectionAction().getPickerAction().getEnabledDimensions();
     const auto numEnabledDimensions = std::count_if(enabledDimensions.begin(), enabledDimensions.end(), [](bool b) { return b; });
-
+    qDebug() << "numEnabledDimensions = " << numEnabledDimensions << "length enabledDimensions = " <<enabledDimensions.size();
    
     // resize output data
     std::vector<float> data;
@@ -128,7 +138,14 @@ void ATACViewPlugin::projectPC()
 
     auto spatialDataset = _settingsAction.getSpatialDatasetAction().getCurrentDataset<Points>();
     auto positionClusterDataset = _settingsAction.getSpatialClusterDatasetAction().getCurrentDataset<Clusters>();
-    auto averageClusterDataset = _settingsAction.getAveragesClusterDatasetAction().getCurrentDataset <Clusters>();
+
+    //auto averageClusterDataset = _settingsAction.getAveragesClusterDatasetAction().getCurrentDataset <Clusters>();
+    mv::Dataset<Clusters> featureClusterDataset;
+    const QString featureMatrix = _settingsAction.getFeatureOptionAction().getCurrentText();
+    if (featureMatrix == "ATAC")
+        featureClusterDataset = _settingsAction.getATACClusterDatasetAction().getCurrentDataset<Clusters>();
+    else if (featureMatrix == "RNA")
+        featureClusterDataset = _settingsAction.getRNAClusterDatasetAction().getCurrentDataset<Clusters>();
 
     if (!_projectionOutputDataset.isValid()) {
         _projectionOutputDataset = mv::data().createDerivedDataset("Mapped PC dataset", spatialDataset);
@@ -137,12 +154,12 @@ void ATACViewPlugin::projectPC()
     }
 
     if (!spatialDataset.isValid() || !positionClusterDataset.isValid() || !_pcaOutputDataset.isValid()
-        || !averageClusterDataset.isValid() ) {
+        || !featureClusterDataset.isValid() ) {
         qDebug() << "One or more required datasets for projecting PC are not valid";
         return;
     }
 
-    _computation.triggerProjectAverages(spatialDataset, _projectionOutputDataset, _pcaOutputDataset, averageClusterDataset, positionClusterDataset);
+    _computation.triggerProjectAverages(spatialDataset, _projectionOutputDataset, _pcaOutputDataset, featureClusterDataset, positionClusterDataset);
     
 }
 
@@ -207,7 +224,7 @@ void ATACViewPlugin::plotPCProjection()
         {
             for (const auto& data : mv::data().getAllDatasets())
             {
-                if (data->getGuiName() == "qc_pass")
+                if (data->getGuiName() == "qc_pass") // FIXME: hard-coded
                 {
                     _qcPassDataset = data;
                     qDebug() << "Found qcPass dataset";
@@ -288,7 +305,8 @@ void ATACViewPlugin::addOtherActions()
     GroupAction* groupActionPC = new GroupAction(this, "PC coloring settings");
 
     groupActionPC->addAction(&_settingsAction.getShowAdvancedSettingsAction());
-    groupActionPC->addAction(&_settingsAction.getFeatureDatasetAction());
+    groupActionPC->addAction(&_settingsAction.getFeatureOptionAction());
+    //groupActionPC->addAction(&_settingsAction.getFeatureDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeDatasetAction());
     groupActionPC->addAction(&_settingsAction.getCellTypeSelectionAction());
     groupActionPC->addAction(&_settingsAction.getQcPassAction());
@@ -306,7 +324,10 @@ void ATACViewPlugin::addOtherActions()
 
     _groupActionAdvanced->addAction(&_settingsAction.getSpatialDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getSpatialClusterDatasetAction());
-    _groupActionAdvanced->addAction(&_settingsAction.getAveragesClusterDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getATACAveragesDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getATACClusterDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getRNAAveragesDatasetAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getRNAClusterDatasetAction());
     //groupActionAdvanced->addAction(&_settingsAction.getScatterplotForPCAction()); TODO: remove, not needed now
 
     _groupActionAdvanced->setExpanded(false);

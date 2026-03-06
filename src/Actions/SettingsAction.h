@@ -61,11 +61,14 @@ public: // Action getters
     // not likely to be defined by user   
     DatasetPickerAction& getSpatialDatasetAction() { return _spatialDatasetAction; }
     DatasetPickerAction& getSpatialClusterDatasetAction() { return _spatialClusterDatasetAction; }
-    DatasetPickerAction& getAveragesClusterDatasetAction() { return _averagesClusterDatasetAction; }
+    DatasetPickerAction& getATACClusterDatasetAction() { return _atacClusterDatasetAction; }
+    DatasetPickerAction& getRNAClusterDatasetAction() { return _rnaClusterDatasetAction; }
+    DatasetPickerAction& getATACAveragesDatasetAction() { return _atacAveragesDatasetAction; }
+    DatasetPickerAction& getRNAAveragesDatasetAction() { return _rnaAveragesDatasetAction; }
     //OptionAction& getScatterplotForPCAction() { return _scatterplotForPCAction; }// TODO: remove
 
     // need to be defined by user
-    DatasetPickerAction& getFeatureDatasetAction() { return _featureDatasetAction; }
+    OptionAction& getFeatureOptionAction() { return _featureOptionAction; }
     DatasetPickerAction& getCellTypeDatasetAction() { return _cellTypeDatasetAction; }
     OptionsAction& getCellTypeSelectionAction() { return _cellTypeSelectionAction; }
     TriggerAction& getStartAnalysisAction() { return _startAnalysisAction; }
@@ -94,12 +97,16 @@ private:
     // not likely to be defined by user
     DatasetPickerAction                 _spatialDatasetAction; // obsm/spatial_cirro_grid_4col
     DatasetPickerAction                 _spatialClusterDatasetAction; // Cluster_v4_label
-    DatasetPickerAction                 _averagesClusterDatasetAction; // Clusters (for ATAC averages) or cell_type (for RNA)
+    DatasetPickerAction                 _atacClusterDatasetAction; // Clusters (for ATAC averages)
+    DatasetPickerAction                 _rnaClusterDatasetAction;// cell_type (for RNA)
+    DatasetPickerAction                 _atacAveragesDatasetAction; // avgExprDataset (for ATAC)
+    DatasetPickerAction                 _rnaAveragesDatasetAction; // marm
+
     //OptionAction                        _scatterplotForPCAction;// scatterplot View for a spatial map colored by PC projection // TODO: remove
 
 
-    // need to be defined by user
-    DatasetPickerAction                 _featureDatasetAction; // e.g. avgExprDataset (for ATAC) or marm_Cluster_v4_metacell (for RNA)
+    // need to be defined by user   
+    OptionAction                        _featureOptionAction;
     DatasetPickerAction                 _cellTypeDatasetAction; // e.g. Cluster_NT
     // select a cell type from the above cell type dataset
     OptionsAction                       _cellTypeSelectionAction; //e.g. Glut or GABA   
