@@ -174,7 +174,7 @@ void SettingsAction::setUpDimensionSelectionAction()
         _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
 
         //set default selected dimensions to none
-        _dimensionSelectionAction.getPickerAction().selectDimensions({}, true);
+        _dimensionSelectionAction.getPickerAction().selectDimensions({0, 1}, true);
         //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
     }
     else if (_featureOptionAction.getCurrentText() == "RNA")
@@ -190,7 +190,7 @@ void SettingsAction::setUpDimensionSelectionAction()
         _dimensionSelectionAction.getPickerAction().setPointsDataset(featureDataset);
 
         //set default selected dimensions to none
-        _dimensionSelectionAction.getPickerAction().selectDimensions({}, true);
+        _dimensionSelectionAction.getPickerAction().selectDimensions({0, 1}, true);
         //qDebug() << "SettingsAction dimensionSelectionAction dataset set to " << featureDataset->getGuiName();
     }
 }
