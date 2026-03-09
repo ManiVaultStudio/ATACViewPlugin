@@ -20,8 +20,12 @@ void Computation::triggerPCA(mv::Dataset<Points> inputDataset, mv::Dataset<Point
     if (!componentsAction) {
         qCritical() << "Number of PCA components action not found";
     }
-    componentsAction->setMaximum(inputDataset->getNumDimensions());
-    componentsAction->setValue(inputDataset->getNumDimensions());
+    int numMaxPC = std::min(inputDataset->getNumDimensions(), inputDataset->getNumPoints());
+    //qDebug() << "numMaxPC " << numMaxPC;
+    //componentsAction->setMaximum(inputDataset->getNumDimensions());
+    //componentsAction->setValue(inputDataset->getNumDimensions());
+    componentsAction->setMaximum(numMaxPC);
+    componentsAction->setValue(numMaxPC);
 
 
     auto startAction = dynamic_cast<TriggerAction*>(outputDataset->findChildByPath("PCA/Start analysis"));
