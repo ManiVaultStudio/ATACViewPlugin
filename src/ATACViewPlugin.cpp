@@ -308,12 +308,12 @@ void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
         if (analysisPlugin->getOutputDataset()->getGuiName() == "Mapped ATAC dataset") //FIXME: hard-coded
         {
             _mappedATACDataset = analysisPlugin->getOutputDataset();
-            qDebug() << "Store Mapped ATAC dataset";
+            qDebug() << "Store Mapped ATAC dataset in ATACViewPlugin";
         }
         else if (analysisPlugin->getOutputDataset()->getGuiName() == "Mapped RNA dataset")
         {
             _mappedRNADataset = analysisPlugin->getOutputDataset();
-            qDebug() << "Store Mapped RNA dataset";
+            qDebug() << "Store Mapped RNA dataset in ATACViewPlugin";
         }
 
         groupAction->addAction(analysisPlugin->getOutputDataset()->findChildByPath<DimensionPickerAction>("Settings/Averages Dataset Dimension"));
