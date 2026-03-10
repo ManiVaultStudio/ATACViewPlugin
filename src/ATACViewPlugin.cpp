@@ -48,6 +48,16 @@ ATACViewPlugin::ATACViewPlugin(const PluginFactory* factory) :
 
         _computation.triggerExportATAC(_mappedATACDataset);
         });
+
+    connect(&_settingsAction.getExportImputedRNAAction(), &TriggerAction::triggered, this, [this]() {
+        if (!_mappedRNADataset.isValid())
+        {
+            qDebug() << "_mappedRNADataset not valid";
+            return;
+        }
+
+        _computation.triggerExportRNA(_mappedRNADataset);
+        });
 }
 
 void ATACViewPlugin::init()
@@ -295,10 +305,15 @@ void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
         auto groupAction = new GroupAction(this, analysisPlugin->getOutputDataset()->getGuiName());
 
         // store the dataset
-        if (analysisPlugin->getOutputDataset()->getGuiName() == "Mapped ATAC dataset")
+        if (analysisPlugin->getOutputDataset()->getGuiName() == "Mapped ATAC dataset") //FIXME: hard-coded
         {
             _mappedATACDataset = analysisPlugin->getOutputDataset();
             qDebug() << "Store Mapped ATAC dataset";
+        }
+        else if (analysisPlugin->getOutputDataset()->getGuiName() == "Mapped RNA dataset")
+        {
+            _mappedRNADataset = analysisPlugin->getOutputDataset();
+            qDebug() << "Store Mapped RNA dataset";
         }
 
         groupAction->addAction(analysisPlugin->getOutputDataset()->findChildByPath<DimensionPickerAction>("Settings/Averages Dataset Dimension"));
@@ -339,6 +354,7 @@ void ATACViewPlugin::addOtherActions()
     _groupActionAdvanced->addAction(&_settingsAction.getRNAClusterDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getPCSelectionAction());
     _groupActionAdvanced->addAction(&_settingsAction.getExportImputedATACAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getExportImputedRNAAction());
 
     _groupActionAdvanced->setExpanded(false);
 

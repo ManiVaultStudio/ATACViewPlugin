@@ -15,9 +15,9 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _rnaClusterDatasetAction(this, "RNA cluster dataset"),
     _atacAveragesDatasetAction(this, "ATAC averages dataset"),
     _rnaAveragesDatasetAction(this, "RNA averages dataset"),
-
     _pcSelectionAction(this, "PC"),
-    _exportImputedATACAction(this, "Export ATAC"),//Export the current imputed ATAC peak to csv
+    _exportImputedATACAction(this, "Export imputed ATAC"),
+    _exportImputedRNAAction(this, "Export imputed RNA"),
 
     _featureOptionAction(this, "Data"),
     _showAdvancedSettingsAction(this, "Show advanced settings"),
@@ -74,8 +74,9 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _rnaClusterDatasetAction.setToolTip("Cluster annotations for RNA data used to project cluster averages");
     _atacAveragesDatasetAction.setToolTip("Cluster-by-peak matrix");
     _rnaAveragesDatasetAction.setToolTip("Cluster-by-gene matrix");
-
     _pcSelectionAction.setToolTip("Select PC for coloring");
+    _exportImputedATACAction.setToolTip("Export the current imputed ATAC peak to csv");
+    _exportImputedRNAAction.setToolTip("Export the current imputed RNA gene to csv");
 
     _cellTypeDatasetAction.setToolTip("Select annotation source");
     _cellTypeSelectionAction.setToolTip("Select cell types to display"); 

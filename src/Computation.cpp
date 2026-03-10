@@ -213,8 +213,21 @@ void Computation::triggerExportATAC(mv::Dataset<Points> mappedDataset)
 {
     auto ExportAction = dynamic_cast<TriggerAction*>(mappedDataset->findChildByPath("Settings/Export"));
     if (ExportAction) {
+        //qDebug() << "Export ATAC started";
+        ExportAction->trigger(); 
+    }
+    else
+    {
+        qDebug() << "ERROR: Export action not found in " << mappedDataset->getGuiName();
+    }
+}
+
+void Computation::triggerExportRNA(mv::Dataset<Points> mappedDataset)
+{
+    auto ExportAction = dynamic_cast<TriggerAction*>(mappedDataset->findChildByPath("Settings/Export"));
+    if (ExportAction) {
+        //qDebug() << "Export RNA started";
         ExportAction->trigger();
-        qDebug() << "Export ATAC started";
     }
     else
     {

@@ -39,6 +39,8 @@ public:
 
     void triggerExportATAC(mv::Dataset<Points> mappedDataset);
 
+    void triggerExportRNA(mv::Dataset<Points> mappedDataset);
+
 private:
 
     void setupPCAScatterplot(const QString& positionDatasetID,

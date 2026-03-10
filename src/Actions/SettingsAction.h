@@ -57,15 +57,16 @@ public: // Serialization
 
 public: // Action getters
 
-    // advanced settings: not likely to be defined by user
+    // advanced settings: not likely to be used by user
     DatasetPickerAction& getSpatialDatasetAction() { return _spatialDatasetAction; }
     DatasetPickerAction& getSpatialClusterDatasetAction() { return _spatialClusterDatasetAction; }
     DatasetPickerAction& getATACClusterDatasetAction() { return _atacClusterDatasetAction; }
     DatasetPickerAction& getRNAClusterDatasetAction() { return _rnaClusterDatasetAction; }
     DatasetPickerAction& getATACAveragesDatasetAction() { return _atacAveragesDatasetAction; }
     DatasetPickerAction& getRNAAveragesDatasetAction() { return _rnaAveragesDatasetAction; }
-
     DimensionPickerAction& getPCSelectionAction() { return _pcSelectionAction; }
+    TriggerAction& getExportImputedATACAction() { return _exportImputedATACAction; }
+    TriggerAction& getExportImputedRNAAction() { return _exportImputedRNAAction; }
 
     // PC coloring
     ToggleAction& getShowAdvancedSettingsAction() { return _showAdvancedSettingsAction; }
@@ -78,7 +79,6 @@ public: // Action getters
 
     DimensionSelectionAction& getDimensionSelectionAction() { return _dimensionSelectionAction; }
 
-    TriggerAction& getExportImputedATACAction() { return _exportImputedATACAction;  }
 
 protected:
     void setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin);
@@ -90,15 +90,16 @@ protected:
 private:
     ATACViewPlugin* _atacViewPlugin;
 
-    // advanced settings: not likely to be defined by user
+    // advanced settings: not likely to be used by user
     DatasetPickerAction                 _spatialDatasetAction; // obsm/spatial_cirro_grid_4col
     DatasetPickerAction                 _spatialClusterDatasetAction; // Cluster_v4_label
     DatasetPickerAction                 _atacClusterDatasetAction; // Clusters (for ATAC averages)
     DatasetPickerAction                 _rnaClusterDatasetAction;// cell_type (for RNA)
     DatasetPickerAction                 _atacAveragesDatasetAction; // avgExprDataset (for ATAC)
     DatasetPickerAction                 _rnaAveragesDatasetAction; // marm
-
-    DimensionPickerAction                        _pcSelectionAction; // which pc to display, e.g. PC1
+    DimensionPickerAction               _pcSelectionAction; // which pc to display, e.g. PC1
+    TriggerAction                       _exportImputedATACAction;
+    TriggerAction                       _exportImputedRNAAction;
 
     // PC coloring 
     OptionAction                        _featureOptionAction;
@@ -111,6 +112,5 @@ private:
 
     DimensionSelectionAction            _dimensionSelectionAction;
 
-    TriggerAction                       _exportImputedATACAction;
 
 };
