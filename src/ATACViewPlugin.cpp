@@ -346,6 +346,8 @@ void ATACViewPlugin::addOtherActions()
 
     _groupActionAdvanced = new GroupAction(this, "Advanced settings"); // settings that are not likely to be used by the user
 
+    _groupActionAdvanced->addAction(&_settingsAction.getExportImputedATACAction());
+    _groupActionAdvanced->addAction(&_settingsAction.getExportImputedRNAAction());
     _groupActionAdvanced->addAction(&_settingsAction.getSpatialDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getSpatialClusterDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getATACAveragesDatasetAction());
@@ -353,8 +355,6 @@ void ATACViewPlugin::addOtherActions()
     _groupActionAdvanced->addAction(&_settingsAction.getRNAAveragesDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getRNAClusterDatasetAction());
     _groupActionAdvanced->addAction(&_settingsAction.getPCSelectionAction());
-    _groupActionAdvanced->addAction(&_settingsAction.getExportImputedATACAction());
-    _groupActionAdvanced->addAction(&_settingsAction.getExportImputedRNAAction());
 
     _groupActionAdvanced->setExpanded(false);
 
