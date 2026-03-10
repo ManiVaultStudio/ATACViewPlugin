@@ -96,6 +96,8 @@ protected:
 
     mv::Dataset<Clusters>   _qcPassDataset; // cluster dataset for QC pass/fail information
 
+    mv::Dataset<Points>     _mappedATACDataset;
+
     SettingsAction              _settingsAction;         
 
     GroupsAction*           _groupForAction = nullptr;

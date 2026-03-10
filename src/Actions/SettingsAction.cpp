@@ -17,6 +17,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _rnaAveragesDatasetAction(this, "RNA averages dataset"),
 
     _pcSelectionAction(this, "PC"),
+    _exportImputedATACAction(this, "Export ATAC"),//Export the current imputed ATAC peak to csv
 
     _featureOptionAction(this, "Data"),
     _showAdvancedSettingsAction(this, "Show advanced settings"),

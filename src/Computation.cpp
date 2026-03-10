@@ -208,3 +208,16 @@ void Computation::setupPCAScatterplot(const QString& positionDatasetID,
         qWarning() << "opacityDatasetPickerValueAction not found";
     }
 }
+
+void Computation::triggerExportATAC(mv::Dataset<Points> mappedDataset)
+{
+    auto ExportAction = dynamic_cast<TriggerAction*>(mappedDataset->findChildByPath("Settings/Export"));
+    if (ExportAction) {
+        ExportAction->trigger();
+        qDebug() << "Export ATAC started";
+    }
+    else
+    {
+        qDebug() << "ERROR: Export action not found in " << mappedDataset->getGuiName();
+    }
+}

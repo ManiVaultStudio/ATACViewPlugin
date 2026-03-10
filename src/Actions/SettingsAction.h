@@ -78,6 +78,8 @@ public: // Action getters
 
     DimensionSelectionAction& getDimensionSelectionAction() { return _dimensionSelectionAction; }
 
+    TriggerAction& getExportImputedATACAction() { return _exportImputedATACAction;  }
+
 protected:
     void setupDatasetPickerActions(ATACViewPlugin* atacViewPlugin);
 
@@ -108,5 +110,7 @@ private:
     ToggleAction _showAdvancedSettingsAction; // whether to show advanced settings
 
     DimensionSelectionAction            _dimensionSelectionAction;
+
+    TriggerAction                       _exportImputedATACAction;
 
 };

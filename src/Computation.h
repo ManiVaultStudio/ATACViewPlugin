@@ -37,11 +37,12 @@ public:
     void plotScatterplot(const QString& positionDatasetID,
         const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap);
 
+    void triggerExportATAC(mv::Dataset<Points> mappedDataset);
+
 private:
 
     void setupPCAScatterplot(const QString& positionDatasetID,
         const QString& colorDatasetID, const QString& celltypeClusterDatasetID, const QString& opacityDatasetID, const QString& colorMap);
-
 
 
 private:
