@@ -343,6 +343,7 @@ void ATACViewPlugin::addOtherActions()
 
     GroupAction* groupActionPCAInputDimensions = new GroupAction(this, "PCA input dimensions");
     groupActionPCAInputDimensions->addAction(&_settingsAction.getDimensionSelectionAction());
+    groupActionPCAInputDimensions->setShowLabels(false);
 
     groupActionPC->setExpanded(true);
 
