@@ -320,6 +320,8 @@ void ATACViewPlugin::addProjectAveragesSettingsGroupActions()
 
         groupAction->setExpanded(true);
 
+        groupAction->setShowLabels(false);
+
         _groupForAction->addGroupAction(groupAction);
     }
 }

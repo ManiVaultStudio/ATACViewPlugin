@@ -45,7 +45,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 
     _featureOptionAction.initialize(QStringList({ "ATAC", "RNA" }), "ATAC");
 
-    
+    _dimensionSelectionAction.setShowLabels(false);
     
     addAction(&_spatialDatasetAction);
     addAction(&_spatialClusterDatasetAction);
