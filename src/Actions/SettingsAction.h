@@ -4,7 +4,6 @@
 #include <actions/TriggerAction.h>
 #include <actions/DatasetPickerAction.h>
 #include <actions/OptionsAction.h>
-//#include <actions/OptionAction.h>
 #include <actions/ToggleAction.h>
 #include<actions/ColorMap1DAction.h>
 
@@ -108,7 +107,7 @@ private:
     TriggerAction                       _startAnalysisAction;   
     ColorMap1DAction                    _colorMapSelectionAction;
     ToggleAction                        _qcPassAction;
-    ToggleAction _showAdvancedSettingsAction; // whether to show advanced settings
+    ToggleAction                        _showAdvancedSettingsAction; // whether to show advanced settings
 
     DimensionSelectionAction            _dimensionSelectionAction;
 

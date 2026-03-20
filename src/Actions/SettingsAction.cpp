@@ -35,13 +35,13 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     setShowLabels(true);
     setLabelSizingType(LabelSizingType::Auto);
 
-
     if (_atacViewPlugin == nullptr)
         return;
 
     setupDatasetPickerActions(_atacViewPlugin);
 
     _dimensionSelectionAction.setDefaultWidgetFlags(OptionsAction::ComboBox | OptionsAction::File);
+    _cellTypeSelectionAction.setDefaultWidgetFlags(OptionsAction::ComboBox | OptionsAction::Selection);
 
     _featureOptionAction.initialize(QStringList({ "ATAC", "RNA" }), "ATAC");
 
@@ -66,7 +66,6 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_colorMapSelectionAction);
     addAction(&_showAdvancedSettingsAction);
 
-    //_pcSelectionAction.setCurrentDimensionIndex(0); //initialize
 
     _spatialDatasetAction.setToolTip("Spatial map");
     _spatialClusterDatasetAction.setToolTip("Cluster annotations for spatial cells used as the projection base");
