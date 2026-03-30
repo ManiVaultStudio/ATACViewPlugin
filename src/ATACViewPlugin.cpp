@@ -339,13 +339,13 @@ void ATACViewPlugin::addOtherActions()
     groupActionPC->addAction(&_settingsAction.getColorMapSelectionAction());
     groupActionPC->addAction(&_settingsAction.getStartAnalysisAction());
 
-    groupActionPC->setExpanded(true);
+    groupActionPC->setExpanded(false);
 
     GroupAction* groupActionPCAInputDimensions = new GroupAction(this, "PCA input dimensions");
     groupActionPCAInputDimensions->addAction(&_settingsAction.getDimensionSelectionAction());
     groupActionPCAInputDimensions->setShowLabels(false);
 
-    groupActionPC->setExpanded(true);
+    groupActionPC->setExpanded(false);
 
     _groupActionAdvanced = new GroupAction(this, "Advanced settings"); // settings that are not likely to be used by the user
 
