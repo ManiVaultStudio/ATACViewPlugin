@@ -4,6 +4,7 @@
 
 using namespace mv;
 using namespace mv::gui;
+using namespace mv::plugin;
 
 void Computation::triggerPCA(mv::Dataset<Points> inputDataset, mv::Dataset<Points> outputDataset)
 {
