@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QMimeData>
+#include <QMessageBox>
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ATACViewPlugin")
 

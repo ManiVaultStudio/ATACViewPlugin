@@ -4,6 +4,7 @@
 
 #include <QHBoxLayout>
 
+using namespace mv;
 using namespace mv::gui;
 
 SettingsAction::SettingsAction(QObject* parent, const QString& title) :
